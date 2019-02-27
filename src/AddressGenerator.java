@@ -7,7 +7,6 @@ import java.util.Random;
 public class AddressGenerator {
 
     private String filename = "random_addresses.txt";
-    //Wasn't sure how the naming conventions of the streets were taken care of, so I just used numbers and letters.
     private String[] directions = {"South", "East"};
 
     public String createRandomAddress(){
