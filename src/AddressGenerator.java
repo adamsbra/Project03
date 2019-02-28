@@ -23,7 +23,7 @@ public class AddressGenerator {
         }
         //Prints out the house number, street type, and street number.
         //Street number is random number 1 through 20
-        return house_number + " " + directions[rand.nextInt(2)] + " " + rand.nextInt(20) + "\n";
+        return house_number + " " + directions[rand.nextInt(2)] + " " + (rand.nextInt(20 - 1) + 1) + "\n";
 
     }
 
@@ -38,5 +38,10 @@ public class AddressGenerator {
         }
         //Close writer
         writer.close();
+    }
+
+    public void loadAddresses(){
+        File file = new File(filename);
+
     }
 }
