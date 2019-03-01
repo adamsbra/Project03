@@ -35,6 +35,12 @@ public class LocationMapDisplay {
 
     public void printLocations(){
         for (int i = 0; i < this.height; i++){
+            if (i < 10){
+                System.out.print("00");
+            }
+            if (i >= 10 && i < 100){
+                System.out.print("0");
+            }
             System.out.print(i + "0");
             for (int j = 0; j < this.width; j++){
                 System.out.print(this.map[i][j]);
