@@ -11,7 +11,7 @@ public class AddressGenerator {
     //Just for storing south and east.
     private String[] directions = {"South", "East"};
 
-    public String createRandomAddress(){
+    private String createRandomAddress(){
         //Get a Random instance
         Random rand = new Random();
         //Instantiate house number
@@ -38,10 +38,5 @@ public class AddressGenerator {
         }
         //Close writer
         writer.close();
-    }
-
-    public void loadAddresses(){
-        File file = new File(filename);
-
     }
 }

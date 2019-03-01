@@ -11,10 +11,6 @@ public class Route {
 
     public void addRoutes(String filename) throws FileNotFoundException {
         Location truckLocation = new Location(910, 9, "South");
-//        Location location = new Location(10, 1, "South", truckLocation);
-//        Location location_2 = new Location(10, 2, "South", truckLocation);
-//        locations.add(location);
-//        locations.add(location_2);
         Scanner sc = new Scanner(new FileInputStream(filename));
         while(sc.hasNext()){
             String line[] = sc.nextLine().split(" ");
@@ -26,7 +22,7 @@ public class Route {
         }
     }
 
-    public void printAddresses(){
+    public void printLocations(){
 //        for (Location location : locations) {
 //            System.out.println(location.toString() + " " + location.distance + " " + location.east + " " + location.south);
 //        }

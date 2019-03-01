@@ -1,9 +1,9 @@
 
 public class LocationMapDisplay {
 
-    String[][] map;
-    int width;
-    int height;
+    private String[][] map;
+    private int width;
+    private int height;
 
     //Creates a 2d array with the route
     LocationMapDisplay(int width, int height, Route route){
@@ -25,7 +25,7 @@ public class LocationMapDisplay {
     }
 
     //Changes symbols based on east and south.
-    public void addLocations(Route route){
+    private void addLocations(Route route){
         for (Location l: route.locations){
             int east = l.east;
             int south = l.south;

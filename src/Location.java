@@ -1,20 +1,20 @@
 public class Location implements Comparable<Location>{
 
-    public final double BLOCK_DISTANCE = 1320;
-    public final double HOUSE_DISTANCE = BLOCK_DISTANCE / 9; // New block distance, quarter of a mile converted to feet, divided by 9
-    public final double FEET_IN_MILE = 5280;
+    private final double BLOCK_DISTANCE = 1320;
+    private final double HOUSE_DISTANCE = BLOCK_DISTANCE / 9; // New block distance, quarter of a mile converted to feet, divided by 9
+    private final double FEET_IN_MILE = 5280;
 
-    public int street_number;
-    public int house_number;
-    public String direction;
-    public double distance;
+    private int street_number;
+    private int house_number;
+    private String direction;
+    private double distance;
     public int east;
     public int south;
 
     //I added a new attribute distance which gets rid of the need for the treemap. Block distance is now measured in feet,
     //and adjustments have been made for it. Get Distance uses the truck as the origin location now.
 
-    public Location(int house_number, int street_number, String direction, Location truck){
+    Location(int house_number, int street_number, String direction, Location truck){
         this.house_number = house_number;
         this.street_number = street_number;
         this.direction = direction;
@@ -43,7 +43,7 @@ public class Location implements Comparable<Location>{
     }
 
     //Distanceless constructor for creating the truck location.
-    public Location(int house_number, int street_number, String direction) {
+    Location(int house_number, int street_number, String direction) {
         this.house_number = house_number;
         this.street_number = street_number;
         this.direction = direction;
@@ -62,53 +62,9 @@ public class Location implements Comparable<Location>{
         if(origin.south == south && origin.east == east){
             return 0;
         }
-
-        int southHouses = 0;//Counts how many houses vertically
-        int eastHouses = 0;//Counts how many houses horizontally
-        /* I'm not going to modify it for the time being, but all of the below code can
-        be simplified greatly using these two statements
+        //As far as I can tell, this acheives the same thing as the previous getDistance code.
         int southHouses = Math.abs(origin.south - south);
         int eastHouses = Math.abs(origin.east - east);
-        As far as I can tell, it accomplishes the same thing.
-        */
-        //Destination is Up
-        if(origin.south < south) {
-            int temp_south = south;
-            while (temp_south != origin.south) {
-                temp_south--;
-                southHouses--;
-            }
-            southHouses = southHouses * -1;
-
-        }
-
-        //Destination is Down
-        else{
-            int temp_south = south;
-            while (temp_south != origin.south) {
-                temp_south++;
-                southHouses++;
-            }
-        }
-
-        //Destination is Left
-        if(origin.east < east) {
-            int temp_east = east;
-            while (temp_east != origin.east) {
-                temp_east--;
-                eastHouses--;
-            }
-            eastHouses = eastHouses * -1;
-        }
-
-        //Destination is Right
-        else{
-            int temp_east = east;
-            while(temp_east != origin.east){
-                temp_east++;
-                eastHouses++;
-            }
-        }
 
         //if we don't need the number
         //maybe use String getDistance, that way you can say 0.25 miles, and not just 0.25.
