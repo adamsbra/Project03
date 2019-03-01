@@ -65,7 +65,12 @@ public class Location implements Comparable<Location>{
 
         int southHouses = 0;//Counts how many houses vertically
         int eastHouses = 0;//Counts how many houses horizontally
-
+        /* I'm not going to modify it for the time being, but all of the below code can
+        be simplified greatly using these two statements
+        int southHouses = Math.abs(origin.south - south);
+        int eastHouses = Math.abs(origin.east - east);
+        As far as I can tell, it accomplishes the same thing.
+        */
         //Destination is Up
         if(origin.south < south) {
             int temp_south = south;
