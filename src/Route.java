@@ -7,17 +7,17 @@ import java.util.Map;
 public class Route {
 
     public PriorityQueue<Location> locations = new PriorityQueue<>();
+    public Location truck = new Location(910, 9, "South");
 
 
     public void addRoutes(String filename) throws FileNotFoundException {
-        Location truckLocation = new Location(910, 9, "South");
         Scanner sc = new Scanner(new FileInputStream(filename));
         while(sc.hasNext()){
             String line[] = sc.nextLine().split(" ");
             int house_number = Integer.parseInt(line[0]);
             String direction = line[1];
             int street_number = Integer.parseInt(line[2]);
-            Location customerLocation = new Location(house_number, street_number, direction, truckLocation);
+            Location customerLocation = new Location(house_number, street_number, direction, truck);
             locations.add(customerLocation);
         }
     }

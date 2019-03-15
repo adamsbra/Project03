@@ -1,3 +1,4 @@
+import java.nio.charset.Charset;
 
 public class LocationMapDisplay {
 
@@ -29,8 +30,14 @@ public class LocationMapDisplay {
         for (Location l: route.locations){
             int east = l.east;
             int south = l.south;
-            this.map[east][south] = "o";
+            this.map[east][south] = "\u2616";
         }
+    }
+
+    public void addTruckLocation(Location truck){
+        int east = truck.east;
+        int south = truck.south;
+        this.map[east][south] = "\u2738";
     }
 
     public void printLocations(){

@@ -1,3 +1,5 @@
+import java.sql.Time;
+
 public class Location implements Comparable<Location>{
 
     private final double BLOCK_DISTANCE = 1320;
@@ -10,6 +12,7 @@ public class Location implements Comparable<Location>{
     private double distance;
     public int east;
     public int south;
+    public Time time;
 
     //I added a new attribute distance which gets rid of the need for the treemap. Block distance is now measured in feet,
     //and adjustments have been made for it. Get Distance uses the truck as the origin location now.
@@ -75,6 +78,14 @@ public class Location implements Comparable<Location>{
         return house_number + " " +  direction + " " +  street_number + "St";
     }
 
+
+    public Time getTime(){
+        return time;
+    }
+
+    public void setTime(){
+
+    }
     //Comparator needed for adding the locations to the PriorityQueue.
     @Override
     public int compareTo(Location location) {

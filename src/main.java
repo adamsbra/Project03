@@ -9,6 +9,7 @@ public class main {
             Route route = new Route();
             route.addRoutes("random_addresses.txt");
             LocationMapDisplay map = new LocationMapDisplay(201, 201, route);
+            map.addTruckLocation(route.truck);
             map.printLocations();
         } catch (IOException e) {
             e.printStackTrace();
