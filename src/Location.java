@@ -1,4 +1,4 @@
-import java.sql.Time;
+import java.time.LocalTime;
 
 public class Location implements Comparable<Location>{
 
@@ -8,19 +8,20 @@ public class Location implements Comparable<Location>{
 
     private int street_number;
     private int house_number;
-    private String direction;
-    private double distance;
+    public String direction;
+    public double distance;
     public int east;
     public int south;
-    public Time time;
+    public LocalTime time;
 
     //I added a new attribute distance which gets rid of the need for the treemap. Block distance is now measured in feet,
     //and adjustments have been made for it. Get Distance uses the truck as the origin location now.
 
-    Location(int house_number, int street_number, String direction, Location truck){
+    Location(int house_number, int street_number, String direction, Location truck, LocalTime time){
         this.house_number = house_number;
         this.street_number = street_number;
         this.direction = direction;
+        this.time = time;
 
         //1 = 010;  11 = 110;  22 = 220... etc
         //0, 10, 20, is to specify that is not in that street, but you go up to that street number
@@ -47,6 +48,7 @@ public class Location implements Comparable<Location>{
 
     //Distanceless constructor for creating the truck location.
     Location(int house_number, int street_number, String direction) {
+        this.time = null;
         this.house_number = house_number;
         this.street_number = street_number;
         this.direction = direction;
@@ -74,21 +76,18 @@ public class Location implements Comparable<Location>{
         return ((eastHouses + southHouses) * HOUSE_DISTANCE) / FEET_IN_MILE;
     }
 
+    public void changeLocation(int east, int south){
+        this.east = east;
+        this.south = south;
+    }
+
     public String toString(){
         return house_number + " " +  direction + " " +  street_number + "St";
     }
 
-
-    public Time getTime(){
-        return time;
-    }
-
-    public void setTime(){
-
-    }
     //Comparator needed for adding the locations to the PriorityQueue.
     @Override
     public int compareTo(Location location) {
-        return Double.compare(this.distance, location.distance);
+        return this.time.compareTo(location.time);
     }
 }
