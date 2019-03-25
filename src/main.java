@@ -7,10 +7,12 @@ public class main {
         try {
             generator.generateAddresses();
             Route route = new Route();
-            route.addRoutes("random_addresses.txt");
-            LocationMapDisplay map = new LocationMapDisplay(201, 201, route);
-            map.addTruckLocation(route.truck);
-            map.printLocations();
+            Truck truck = new Truck();
+            route.addLocations("random_addresses.txt");
+            route.printLocations();
+            LocationMapDisplay lmd = new LocationMapDisplay(201, 201, 804, 804, route, truck.getLocation());
+//            map.addTruckLocation(route.truck);
+//            map.printLocations();
         } catch (IOException e) {
             e.printStackTrace();
         }
