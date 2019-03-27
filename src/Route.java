@@ -12,7 +12,25 @@ public class Route {
 
     public PriorityQueue<Location> locations = new PriorityQueue<>();
     public Truck truck = new Truck();
+    public ArrayList<Location> loc_array = new ArrayList<>();
+    public Simulation strategy;
 
+    public Route(String filename, String strat){
+        try{
+            addLocations(filename);
+            if (strat.equalsIgnoreCase("left")){
+                strategy = new LeftSimulation();
+            }
+            else if (strat.equalsIgnoreCase("right")){
+                strategy = new RightSimulation();
+            }
+        }
+        catch (FileNotFoundException ex){
+            ex.printStackTrace();
+        }
+
+
+    }
 
     public void addLocations(String filename) throws FileNotFoundException {
         Scanner sc = new Scanner(new FileInputStream(filename));
@@ -29,46 +47,54 @@ public class Route {
     }
 
 
-    public void printLocations(){
+    public void printLocations() {
         for (Location location : locations) {
             System.out.println(location.toString() + " " + location.distance + " " + location.east + " " + location.south + " " + location.time);
         }
     }
 
-//    public void createRoute(){
+    public void runSimulation(LocationMapDisplay lmd){
+        try {
+            strategy.runSimulation(lmd, locations, truck);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+//    public void createRoute(LocationMapDisplay lmd) throws InterruptedException{
 //        PriorityQueue<Location> locations_copy = locations;
-//        ArrayList<Pair<Integer, Integer>> loc_map = new ArrayList<>();
 //        while (locations_copy.size() != 0){
-//            Location currentLocation = truck.getLocation();
 //            Location nextLocation = locations_copy.poll();
-//            while (currentLocation != nextLocation) {
+//            while (truck.getLocation().east != nextLocation.east || truck.getLocation().south != nextLocation.south) {
 //                if (!truck.isMoving) {
 //                    if (truck.getLocation().direction.equalsIgnoreCase("east")) {
-//                        int south = nextLocation.south - truck.getLocation().south;
-//                        if (south < 0) {
+//                        int east = nextLocation.east - truck.getLocation().east;
+//                        if (east > 0) {
 //                            truck.moveEast();
-//
-//                        } else if (south > 0) {
+//                        }
+//                        else if (east < 0) {
 //                            truck.moveWest();
-//                        } else {
+//                        }
+//                        else if (east == 0){
 //                            return;
 //                        }
 //
-//                    } else if (truck.getLocation().direction.equalsIgnoreCase("south")) {
-//                        int east = nextLocation.east - truck.getLocation().east;
-//                        if (east < 0) {
-//                            truck.moveNorth();
 //
-//                        } else if (east > 0) {
+//                    } else if (truck.getLocation().direction.equalsIgnoreCase("south")) {
+//                        int south = nextLocation.south - truck.getLocation().south;
+//                        if (south > 0) {
 //                            truck.moveSouth();
-//                        } else {
+//                        } else if (south < 0) {
+//                            truck.moveNorth();
+//                        } else if (south == 0){
 //                            return;
 //                        }
 //                    }
 //                    truck.isMoving = true;
-//                    loc_map.add(new Pair(truck.getLocation().east, truck.getLocation().south));
+//                    loc_array.add(truck.getLocation());
+//                    lmd.repaintRoute();
 //                }
-//                while (!truck.atIntersection()){
+//                else if (!truck.atIntersection()){
 //                    if (truck.isMovingEast){
 //                        truck.moveEast();
 //                    }
@@ -81,28 +107,68 @@ public class Route {
 //                    else if (truck.isMovingSouth){
 //                        truck.moveSouth();
 //                    }
-//                    loc_map.add(new Pair(truck.getLocation().east, truck.getLocation().south));
+//                    loc_array.add(truck.getLocation());
+//                    lmd.repaintRoute();
 //                }
-//                int south = Math.abs(nextLocation.south - truck.getLocation().south);
-//                int east = Math.abs(nextLocation.east - truck.getLocation().east);
-//                if (east > south){
-//                    truck.moveSouth();
+//                else if (truck.atIntersection()){
+//                    int south = nextLocation.south - truck.getLocation().south;
+//                    int east = nextLocation.east - truck.getLocation().east;
+//                    if (truck.isMovingEast){
+//                        if (east > 0){
+//                            truck.moveEast();
+//                        }
+//                        else if (east <= 0){
+//                            truck.moveNorth();
+//                        }
+//                        else{
+//                            return;
+//                        }
+//                        loc_array.add(truck.getLocation());
+//                        lmd.repaintRoute();
+//                    }
+//                    if (truck.isMovingSouth){
+//                        if (south > 0){
+//                            truck.moveSouth();
+//                        }
+//                        else if (south <= 0){
+//                            truck.moveEast();
+//                        }
+//                        else{
+//                            return;
+//                        }
+//                        loc_array.add(truck.getLocation());
+//                        lmd.repaintRoute();
+//                    }
+//                    if (truck.isMovingNorth){
+//                        if (south < 0){
+//                            truck.moveNorth();
+//                        }
+//                        else if (south >= 0){
+//                            truck.moveWest();
+//                        }
+//                        else{
+//                            return;
+//                        }
+//                        loc_array.add(truck.getLocation());
+//                        lmd.repaintRoute();
+//                    }
+//                    if (truck.isMovingWest){
+//                        if (east < 0){
+//                            truck.moveWest();
+//                        }
+//                        else if (east >= 0){
+//                            truck.moveSouth();
+//                        }
+//                        else{
+//                            return;
+//                        }
+//                        loc_array.add(truck.getLocation());
+//                        lmd.repaintRoute();
+//                    }
 //                }
-//                else if (south < east){
-//                    truck.moveEast();
-//                }
-//                else if (east == 0){
-//                    truck.moveEast();
-//                }
-//                else if (south == 0){
-//                    truck.moveSouth();
-//                }
-//                else if ()
-//
-//
+//                Thread.sleep(1000);
 //            }
-//
+//            loc_array.add(truck.getLocation());
+//            lmd.repaintRoute();
 //        }
-//    }
-
-}
+    }

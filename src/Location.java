@@ -32,15 +32,15 @@ public class Location implements Comparable<Location>{
 
         //I agree with this numbering, but how do you differentiate houses on two different sides of the street? If you
         //go to 9th street, and to the 910 house, there's a house on both sides of that location
-        if(direction.equals("East")){
+        if(direction.equalsIgnoreCase("East")){
             //Subracting 10 because otherwise it puts the house in the wrong location.
-            this.south = (this.house_number / 10);
-            east = (street_number * 10) - 10;
+            this.south = (street_number * 10) - 10;
+            this.east = (this.house_number / 10);
         }
         else {
             //Subracting 10 because otherwise it puts the house in the wrong location.
-            south = (street_number * 10) - 10;
-            this.east = (this.house_number / 10);
+            this.south = (this.house_number / 10);
+            this.east = (street_number * 10) - 10;
         }
         Double raw_distance = getDistance(truck);
         this.distance = Math.round(raw_distance * 100.0) / 100.0;
@@ -53,12 +53,12 @@ public class Location implements Comparable<Location>{
         this.street_number = street_number;
         this.direction = direction;
         this.distance = 0;
-        if (direction.equals("East")) {
-            south = house_number / 10;
-            east = (street_number * 10) - 10;
+        if (direction.equalsIgnoreCase("East")) {
+            this.south = (street_number * 10) - 10;
+            this.east = house_number / 10;
         } else {
-            south = (street_number * 10) - 10;
-            east = house_number / 10;
+            this.south = (this.house_number / 10);
+            this.east = (street_number * 10) - 10;
         }
     }
 

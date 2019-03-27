@@ -27,11 +27,11 @@ public class AddressGenerator {
         //Weird comparison but it works, wont accept numbers with 00 in tens place
         while (house_number % 100 == 0|| house_number % 10 != 0){
             //Random numbers between 1 and 2000
-            house_number = rand.nextInt(2000);
+            house_number = rand.nextInt(1000);
         }
 
         String direction = directions[rand.nextInt(2)];
-        int street_number = rand.nextInt(20 - 1) + 1;
+        int street_number = rand.nextInt(10 - 1) + 1;
 
         //Prints out the house number, street type, and street number.
         //Street number is random number 1 through 20

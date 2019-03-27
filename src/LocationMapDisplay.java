@@ -1,35 +1,48 @@
-import javafx.scene.Scene;
-import javafx.scene.layout.GridPane;
-
 import javax.swing.*;
 import java.awt.*;
-import java.nio.charset.Charset;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.PriorityQueue;
+import java.util.TimerTask;
 
-public class LocationMapDisplay extends JComponent {
+public class LocationMapDisplay extends JPanel {
 
-    private String[][] map;
-    private Location truckLocation;
+    public String[][] map;
+    public Truck truck;
+    public Location nextLocation;
+    public JFrame window;
+    public TimerTask task;
     private int x;
     private int y;
     private int width;
     private int height;
     private int default_width;
     private int default_height;
+    private int square_size = 8;
+    final int STEP_SIZE = 200;
+    public ArrayList<Location> loc_array = new ArrayList<>();
 
-    public LocationMapDisplay(int x, int y, int width, int height, Route route, Location truckLocation) {
+    public LocationMapDisplay(int x, int y, int width, int height, Route route, Truck truck) {
         map = new String[x][y];
         updateLocations(route);
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
-        this.truckLocation = truckLocation;
+        this.truck = truck;
+        this.task = new TimerTask(){
+
+            @Override
+            public void run() {
+                repaint();
+            }
+        };
         drawGrid();
     }
 
     //Creates a 2d array with the route
     public void drawGrid() {
-        JFrame window = new JFrame();
+        this.window = new JFrame();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setBounds(0, 0, width, height);
         window.getContentPane().add(this);
@@ -41,12 +54,8 @@ public class LocationMapDisplay extends JComponent {
         for (Location l : route.locations) {
             int east = l.east;
             int south = l.south;
-            this.map[south][east] = "h";
+            this.map[east][south] = "h";
         }
-    }
-
-    public void updateTruckLocation(Location truck) {
-        truckLocation = truck;
     }
 
     public void printLocations() {
@@ -65,18 +74,19 @@ public class LocationMapDisplay extends JComponent {
         }
     }
 
-    public void paint(Graphics g) {
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
         g.setColor(Color.BLACK);
         for (int i = 0; i < x; i++)
             for (int j = 0; j < y; j++)
-                g.drawRect(i * 4, j * 4, 4, 4);
+                g.drawRect(i * square_size, j * square_size, square_size, square_size);
 
         g.setColor(Color.BLUE);
         for (int i = 0; i < x; i++) {
             for (int j = 0; j < y; j++) {
                 if (map[i][j] != null) {
                     if (map[i][j].equals("h")) {
-                        g.fillRect(i * 4, j * 4, 4, 4);
+                        g.fillRect(i * square_size, j * square_size, square_size, square_size);
                     }
                 }
             }
@@ -85,14 +95,20 @@ public class LocationMapDisplay extends JComponent {
         for (int i = 0; i < x; i++) {
             for (int j = 0; j < y; j++) {
                 if (i % 10 == 0) {
-                    g.fillRect(i * 4, j * 4, 2, 4);
+                    g.fillRect(i * square_size, j * square_size, square_size / 2, square_size);
                 } else if (i % 10 == 0 || j % 10 == 0) {
-                    g.fillRect(i * 4, j * 4, 4, 2);
+                    g.fillRect(i * square_size, j * square_size, square_size, square_size / 2);
                 }
             }
         }
         g.setColor(Color.MAGENTA);
-        g.fillRect(truckLocation.south * 4, truckLocation.east * 4, 4, 4);
+        g.fillRect(truck.getLocation().east * square_size, truck.getLocation().south * square_size, square_size, square_size);
+        g.setColor(Color.GREEN);
+        g.fillRect(nextLocation.east * square_size, nextLocation.south * square_size, square_size, square_size);
+    }
+
+    public void repaintTask(){
+        repaint();
     }
 }
 

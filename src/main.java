@@ -1,16 +1,18 @@
 import java.io.IOException;
+import java.time.LocalTime;
 
 public class main {
 
-    public static void main(String[] args){
+    public static void main(String[] args) throws InterruptedException {
         AddressGenerator generator = new AddressGenerator();
         try {
             generator.generateAddresses();
-            Route route = new Route();
+            Route route = new Route("random_addresses.txt", "right");
             Truck truck = new Truck();
-            route.addLocations("random_addresses.txt");
             route.printLocations();
-            LocationMapDisplay lmd = new LocationMapDisplay(201, 201, 804, 804, route, truck.getLocation());
+            LocationMapDisplay lmd = new LocationMapDisplay(102, 102, 600, 600, route, truck);
+            route.runSimulation(lmd);
+//            route.createRoute(lmd);
 //            map.addTruckLocation(route.truck);
 //            map.printLocations();
         } catch (IOException e) {

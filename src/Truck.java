@@ -6,7 +6,7 @@ import java.util.PriorityQueue;
 
 public class Truck{
 
-    private final Location DISTRIBUTION_CENTER = new Location(910, 9, "South");
+    private final Location DISTRIBUTION_CENTER = new Location(510, 5, "East");
 
     private Location currentLocation = DISTRIBUTION_CENTER;
     public boolean isMovingEast = false;
@@ -41,25 +41,25 @@ public class Truck{
     //these are really confusing, it increments south for move east because technically incrementing south houses means
     //you're moving east
     public void moveEast(){
-        currentLocation.south++;
+        currentLocation.east++;
         resetBooleans();
         isMovingEast = true;
     }
 
     public void moveWest(){
-        currentLocation.south--;
+        currentLocation.east--;
         resetBooleans();
         isMovingWest = true;
     }
 
     public void moveNorth(){
-        currentLocation.east--;
+        currentLocation.south--;
         resetBooleans();
         isMovingNorth = true;
     }
 
     public void moveSouth(){
-        currentLocation.east++;
+        currentLocation.south++;
         resetBooleans();
         isMovingSouth = true;
     }
@@ -70,12 +70,12 @@ public class Truck{
         isMovingWest = false;
         isMovingNorth = false;
     }
+
     public boolean atIntersection(){
         return currentLocation.east % 10 == 0 && currentLocation.south % 10 == 0;
     }
 
-
-    public Location setLocation(){
-        return this.getLocation();
+    public void setCurrentLocation(Location location){
+        this.currentLocation = location;
     }
 }
