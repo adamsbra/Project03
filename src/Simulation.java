@@ -1,13 +1,18 @@
+import javafx.util.Pair;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.PriorityQueue;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public interface Simulation {
 
     double BLOCK_DISTANCE = 1320;
     double HOUSE_DISTANCE = BLOCK_DISTANCE / 9;
-    public void runSimulation(LocationMapDisplay lmd, PriorityQueue<Location> locations, Truck truck) throws InterruptedException;
+    public Route runSimulation(LocationMapDisplay lmd, PriorityQueue<Location> locations, Truck truck, boolean gui) throws InterruptedException;
 
 }
 
@@ -15,7 +20,9 @@ class LeftSimulation implements Simulation{
 
     Location nextLocation;
     Location truckLocation;
+    Route route;
     LocationMapDisplay lmd;
+    ArrayList<Pair<Integer, Integer>> locationsArray;
     int duration = 0;
     int distance = 0;
     final int STEP_TIME = 200;
@@ -24,14 +31,14 @@ class LeftSimulation implements Simulation{
     final int LEFT_UNITS = 4;
 
     @Override
-    public void runSimulation(LocationMapDisplay loc_md, PriorityQueue<Location> locations, Truck truck) throws InterruptedException {
+    public Route runSimulation(LocationMapDisplay loc_md, PriorityQueue<Location> locations, Truck truck, boolean gui) throws InterruptedException {
         this.lmd = loc_md;
+        this.locationsArray = new ArrayList<>();
         PriorityQueue<Location> locations_copy = locations;
         while (locations_copy.size() != 0){
             nextLocation = locations_copy.poll();
             lmd.nextLocation = nextLocation;
             lmd.truck = truck;
-            Timer timer = new Timer();
             while (truck.getLocation().east != nextLocation.east || truck.getLocation().south != nextLocation.south) {
                 int current_duration = 0;
                 if (!truck.isMoving) {
@@ -43,9 +50,6 @@ class LeftSimulation implements Simulation{
                         else if (east < 0) {
                             truck.moveWest();
                         }
-
-
-
                     } else if (truck.getLocation().direction.equalsIgnoreCase("south")) {
                         int south = nextLocation.south - truck.getLocation().south;
                         if (south > 0) {
@@ -53,9 +57,6 @@ class LeftSimulation implements Simulation{
                         }
                         else if (south < 0) {
                             truck.moveNorth();
-                        }
-                        else {
-                            return;
                         }
                     }
                     truck.isMoving = true;
@@ -120,37 +121,37 @@ class LeftSimulation implements Simulation{
                             current_duration = MOVE_UNITS;
                             truck.moveWest();
                         }
-                        else if (east >= 0){
+                        else {
                             current_duration = LEFT_UNITS;
                             truck.moveSouth();
-                        }
-                        else{
-                            return;
                         }
                         truckLocation = truck.getLocation();
                     }
                 }
+                distance++;
                 duration += current_duration;
-                timer.schedule(new TimerTask() {
-
-                    @Override
-                    public void run() {
-                        lmd.repaintTask();
-                    }
-                }, current_duration * STEP_TIME);
-                System.out.println(duration);
+                if (gui) {
+                    Thread.sleep(STEP_TIME * current_duration);
+                    lmd.repaint();
+                }
             }
             truckLocation = truck.getLocation();
             lmd.map[nextLocation.east][nextLocation.south] = "";
-            duration += 5;
-            timer.schedule(new TimerTask() {
-
-                @Override
-                public void run() {
-                    lmd.repaintTask();
-                }
-            },  STOP_UNITS * STEP_TIME);
+            duration += STOP_UNITS;
+            DecimalFormat f = new DecimalFormat("##.00");
+            if (gui) {
+                Thread.sleep(STEP_TIME * STOP_UNITS);
+                lmd.repaint();
+                System.out.println("Duration: " + duration / 60 + " Minutes, " + duration % 60 + " Seconds");
+                System.out.println("Distance: " + f.format(distance * HOUSE_DISTANCE / 5280) + " Miles");
+            }
+            locationsArray.add(new Pair(truckLocation.east, truckLocation.south));
         }
+        DecimalFormat f = new DecimalFormat("##.00");
+        System.out.println("Duration: " + duration / 60 + " Minutes, " + duration % 60 + " Seconds");
+        System.out.println("Distance: " + f.format(distance * HOUSE_DISTANCE / 5280) + " Miles");
+        route = new Route (locationsArray, duration, distance);
+        return route;
     }
 }
 
@@ -160,17 +161,20 @@ class RightSimulation implements Simulation{
     Location truckLocation;
     int duration = 0;
     int distance = 0;
+    Route route;
     LocationMapDisplay lmd;
+    ArrayList<Pair<Integer, Integer>> locationsArray;
     final int STEP_TIME = 200;
     final int STOP_UNITS = 5;
     final int MOVE_UNITS = 1;
     final int RIGHT_UNITS = 4;
 
     @Override
-    public void runSimulation(LocationMapDisplay lmd, PriorityQueue<Location> locations, Truck truck) throws InterruptedException {
-          PriorityQueue<Location> locations_copy = locations;
-          while (locations_copy.size() != 0){
-              nextLocation = locations_copy.poll();
+    public Route runSimulation(LocationMapDisplay lmd, PriorityQueue<Location> locations, Truck truck, boolean gui) throws InterruptedException {
+        PriorityQueue<Location> locations_copy = locations;
+        locationsArray = new ArrayList<>();
+        while (locations_copy.size() != 0) {
+            nextLocation = locations_copy.poll();
             lmd.nextLocation = nextLocation;
             lmd.truck = truck;
             this.lmd = lmd;
@@ -181,12 +185,8 @@ class RightSimulation implements Simulation{
                         int east = nextLocation.east - truck.getLocation().east;
                         if (east > 0) {
                             truck.moveEast();
-                        }
-                        else if (east < 0) {
+                        } else {
                             truck.moveWest();
-                        }
-                        else{
-                            return;
                         }
 
 
@@ -194,75 +194,61 @@ class RightSimulation implements Simulation{
                         int south = nextLocation.south - truck.getLocation().south;
                         if (south > 0) {
                             truck.moveSouth();
-                        } else if (south < 0) {
+                        } else {
                             truck.moveNorth();
-                        } else if (south == 0){
-                            return;
                         }
                     }
                     truck.isMoving = true;
                     truckLocation = truck.getLocation();
                     current_duration = MOVE_UNITS;
-                }
-                else if (!truck.atIntersection()){
-                    if (truck.isMovingEast){
+                } else if (!truck.atIntersection()) {
+                    if (truck.isMovingEast) {
                         truck.moveEast();
-                    }
-                    else if (truck.isMovingWest){
+                    } else if (truck.isMovingWest) {
                         truck.moveWest();
-                    }
-                    else if (truck.isMovingNorth){
+                    } else if (truck.isMovingNorth) {
                         truck.moveNorth();
-                    }
-                    else if (truck.isMovingSouth){
+                    } else if (truck.isMovingSouth) {
                         truck.moveSouth();
                     }
                     truckLocation = truck.getLocation();
                     current_duration = MOVE_UNITS;
 
-                }
-                else if (truck.atIntersection()){
+                } else if (truck.atIntersection()) {
                     int south = nextLocation.south - truck.getLocation().south;
                     int east = nextLocation.east - truck.getLocation().east;
-                    if (truck.isMovingEast){
-                        if (east > 0){
+                    if (truck.isMovingEast) {
+                        if (east > 0) {
                             current_duration = MOVE_UNITS;
                             truck.moveEast();
-                        }
-                        else {
+                        } else {
                             current_duration = RIGHT_UNITS;
                             truck.moveSouth();
                         }
                         truckLocation = truck.getLocation();
-                    }
-                    else if (truck.isMovingSouth){
-                        if (south > 0){
+                    } else if (truck.isMovingSouth) {
+                        if (south > 0) {
                             current_duration = MOVE_UNITS;
                             truck.moveSouth();
-                        }
-                        else {
+                        } else {
                             current_duration = RIGHT_UNITS;
                             truck.moveWest();
                         }
                         truckLocation = truck.getLocation();
-                    }
-                    else if (truck.isMovingNorth){
-                        if (south < 0){
+                    } else if (truck.isMovingNorth) {
+                        if (south < 0) {
                             current_duration = MOVE_UNITS;
                             truck.moveNorth();
-                        }
-                        else {
+                        } else {
                             current_duration = RIGHT_UNITS;
                             truck.moveEast();
                         }
                         truckLocation = truck.getLocation();
-                    }
-                    else if (truck.isMovingWest){
-                        if (east < 0){
+                    } else if (truck.isMovingWest) {
+                        if (east < 0) {
                             truck.moveWest();
                             current_duration = MOVE_UNITS;
-                        }
-                        else {
+                        } else {
                             current_duration = RIGHT_UNITS;
                             truck.moveNorth();
                         }
@@ -271,16 +257,27 @@ class RightSimulation implements Simulation{
                 }
                 distance++;
                 duration += current_duration;
-                Thread.sleep(STEP_TIME);
-                lmd.repaint();
-
+                if (gui) {
+                    Thread.sleep(STEP_TIME * current_duration);
+                    lmd.repaint();
+                }
             }
             truckLocation = truck.getLocation();
             lmd.map[nextLocation.east][nextLocation.south] = "";
             duration += STOP_UNITS;
-            System.out.println("Duration: " + duration / 60 + " Minutes");
-            System.out.println("Distance: " + (double) Math.round(distance * HOUSE_DISTANCE / 5280) + " Miles");
-            lmd.repaint();
-          }
+            if (gui) {
+                DecimalFormat f = new DecimalFormat("##.00");
+                System.out.println("Duration: " + duration / 60 + " Minutes, " + duration % 60 + " Seconds");
+                System.out.println("Distance: " + f.format(distance * HOUSE_DISTANCE / 5280) + " Miles");
+                Thread.sleep(STEP_TIME * STOP_UNITS);
+                lmd.repaint();
+            }
+            locationsArray.add(new Pair(truckLocation.east, truckLocation.south));
+        }
+        DecimalFormat f = new DecimalFormat("##.00");
+        System.out.println("Duration: " + duration / 60 + " Minutes, " + duration % 60 + " Seconds");
+        System.out.println("Distance: " + f.format(distance * HOUSE_DISTANCE / 5280) + " Miles");
+        route = new Route (locationsArray, duration, distance);
+        return route;
     }
 }

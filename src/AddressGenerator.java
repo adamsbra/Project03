@@ -12,6 +12,10 @@ public class AddressGenerator {
     private String filename = "random_addresses.txt";
     //Just for storing south and east.
     private String[] directions = {"South", "East"};
+    private String[] menu_sandwhich = {"Sandwhich 1", "Sandwhich 2", "Sandwhich 3"};
+    private String[] menu_chips = {"Chips 1", "Chips 2"};
+    private String[] menu_drink = {"Drink 1", "Drink 2", "Drink 3"};
+
     private LocalTime time = LocalTime.of(7, 0, 0);
 
     private String createRandomAddress(){
@@ -32,10 +36,13 @@ public class AddressGenerator {
 
         String direction = directions[rand.nextInt(2)];
         int street_number = rand.nextInt(10 - 1) + 1;
+        String order = menu_sandwhich[rand.nextInt(3)] + "," + menu_chips[rand.nextInt(2)] + "," +
+                menu_drink[rand.nextInt(3)];
+
 
         //Prints out the house number, street type, and street number.
         //Street number is random number 1 through 20
-        return house_number + " " + direction + " " + street_number + " " + time.toString() +  "\n";
+        return house_number + " " + direction + " " + street_number + " " + time.toString() +  " " + order + "\n";
 
 
     }

@@ -11,7 +11,6 @@ public class LocationMapDisplay extends JPanel {
     public Truck truck;
     public Location nextLocation;
     public JFrame window;
-    public TimerTask task;
     private int x;
     private int y;
     private int width;
@@ -20,9 +19,10 @@ public class LocationMapDisplay extends JPanel {
     private int default_height;
     private int square_size = 8;
     final int STEP_SIZE = 200;
+    public boolean draw;
     public ArrayList<Location> loc_array = new ArrayList<>();
 
-    public LocationMapDisplay(int x, int y, int width, int height, Route route, Truck truck) {
+    public LocationMapDisplay(int x, int y, int width, int height, SimulationDriver route, Truck truck, boolean draw) {
         map = new String[x][y];
         updateLocations(route);
         this.x = x;
@@ -30,14 +30,9 @@ public class LocationMapDisplay extends JPanel {
         this.width = width;
         this.height = height;
         this.truck = truck;
-        this.task = new TimerTask(){
-
-            @Override
-            public void run() {
-                repaint();
-            }
-        };
-        drawGrid();
+        if (draw) {
+            drawGrid();
+        }
     }
 
     //Creates a 2d array with the route
@@ -50,7 +45,7 @@ public class LocationMapDisplay extends JPanel {
     }
 
     //Changes symbols based on east and south.
-    private void updateLocations(Route route) {
+    private void updateLocations(SimulationDriver route) {
         for (Location l : route.locations) {
             int east = l.east;
             int south = l.south;

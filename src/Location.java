@@ -12,16 +12,18 @@ public class Location implements Comparable<Location>{
     public double distance;
     public int east;
     public int south;
+    public String order;
     public LocalTime time;
 
     //I added a new attribute distance which gets rid of the need for the treemap. Block distance is now measured in feet,
     //and adjustments have been made for it. Get Distance uses the truck as the origin location now.
 
-    Location(int house_number, int street_number, String direction, Location truck, LocalTime time){
+    Location(int house_number, int street_number, String direction, Location truck, LocalTime time, String order){
         this.house_number = house_number;
         this.street_number = street_number;
         this.direction = direction;
         this.time = time;
+        this.order = order;
 
         //1 = 010;  11 = 110;  22 = 220... etc
         //0, 10, 20, is to specify that is not in that street, but you go up to that street number
@@ -53,6 +55,7 @@ public class Location implements Comparable<Location>{
         this.street_number = street_number;
         this.direction = direction;
         this.distance = 0;
+        this.order = null;
         if (direction.equalsIgnoreCase("East")) {
             this.south = (street_number * 10) - 10;
             this.east = house_number / 10;

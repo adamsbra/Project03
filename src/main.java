@@ -1,20 +1,22 @@
 import java.io.IOException;
-import java.time.LocalTime;
 
 public class main {
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         AddressGenerator generator = new AddressGenerator();
         try {
             generator.generateAddresses();
-            Route route = new Route("random_addresses.txt", "right");
+            //You can change the strategy used by the simulation by changing the strat parameter.
+            //Example: SimulationDriver sim_left = new SimulationDriver("random_addresses.txt", "left");
+            SimulationDriver sim = new SimulationDriver("random_addresses.txt", "right");
+            //This parameter allows you to decide if you want to see the gui or not. Has an issue currently where the
+            //Jframe is still created but doesn't show, however this does not impact operation.
+            boolean gui = false;
+            //The gui does not currently support two trucks, however if you would like to compare the performance of the
+            //two trucks, you can run the two simulations together with gui set to false and it will work fine.
             Truck truck = new Truck();
-            route.printLocations();
-            LocationMapDisplay lmd = new LocationMapDisplay(102, 102, 600, 600, route, truck);
-            route.runSimulation(lmd);
-//            route.createRoute(lmd);
-//            map.addTruckLocation(route.truck);
-//            map.printLocations();
+            LocationMapDisplay lmd = new LocationMapDisplay(102, 102, 600, 600, sim, truck, gui);
+            sim.runSimulation(lmd, gui);
         } catch (IOException e) {
             e.printStackTrace();
         }
