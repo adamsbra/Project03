@@ -1,12 +1,11 @@
-import java.time.LocalTime;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.PriorityQueue;
+/*
+Author : Team Null
+Truck
+ */
 
 public class Truck{
 
-    private final Location DISTRIBUTION_CENTER = new Location(910, 9, "South");
+    private final Location DISTRIBUTION_CENTER = new Location(510, 5, "East");
 
     private Location currentLocation = DISTRIBUTION_CENTER;
     public boolean isMovingEast = false;
@@ -14,25 +13,7 @@ public class Truck{
     public boolean isMovingWest = false;
     public boolean isMovingNorth = false;
     public boolean isMoving = false;
-    Map<Integer, Integer> route = new HashMap<>();
-    double length = 0;
 
-    //Route the truck will follow
-    public void setRoute(Map<Integer, Integer> route) {
-        this.route = route;
-    }
-
-    //gets the next location and get the distance from previous to next and add it to length. Also changes the current location of the truck.
-    //That way we don't have to go through the PriorityQueue twice(since we don't know another way to get the length).
-
-    //This somewhat works, but remember that distance will change because we cannot go backwards on roads.
-//    private void nextLocation(){
-//        for(int i = 0; i < 100; i++){
-//            Location nextLocation = route.poll();
-//            length += nextLocation.getDistance(currentLocation);
-//            currentLocation = nextLocation;
-//        }
-//    }
     //returns current location of the truck
     public Location getLocation() {
         return currentLocation;
@@ -40,42 +21,44 @@ public class Truck{
 
     //these are really confusing, it increments south for move east because technically incrementing south houses means
     //you're moving east
+
+    //truck is moving east
     public void moveEast(){
-        currentLocation.south++;
+        currentLocation.east++;
         resetBooleans();
         isMovingEast = true;
     }
 
+    //truck is moving west
     public void moveWest(){
-        currentLocation.south--;
+        currentLocation.east--;
         resetBooleans();
         isMovingWest = true;
     }
 
+    //truck is moving north
     public void moveNorth(){
-        currentLocation.east--;
+        currentLocation.south--;
         resetBooleans();
         isMovingNorth = true;
     }
-
+    //truck is moving south
     public void moveSouth(){
-        currentLocation.east++;
+        currentLocation.south++;
         resetBooleans();
         isMovingSouth = true;
     }
 
+    //resets direction the truck is moving every time the truck changes moving direction.
     public void resetBooleans(){
         isMovingEast = false;
         isMovingSouth = false;
         isMovingWest = false;
         isMovingNorth = false;
     }
+
+    //Truck is at an intersection
     public boolean atIntersection(){
         return currentLocation.east % 10 == 0 && currentLocation.south % 10 == 0;
-    }
-
-
-    public Location setLocation(){
-        return this.getLocation();
     }
 }
