@@ -3,7 +3,6 @@ Author : Team Null
 Interface that has runSimulation
  */
 
-
 import javafx.util.Pair;
 
 import java.text.DecimalFormat;

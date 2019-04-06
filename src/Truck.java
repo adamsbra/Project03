@@ -3,7 +3,6 @@ Author : Team Null
 Truck
  */
 
-
 public class Truck{
 
     private final Location DISTRIBUTION_CENTER = new Location(510, 5, "East");

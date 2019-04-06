@@ -3,7 +3,6 @@ Author : Team Null
 Main
  */
 
-
 import java.io.IOException;
 import java.util.Scanner;
 

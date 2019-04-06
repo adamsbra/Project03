@@ -3,7 +3,6 @@ Author : Team Null
 Takes an order and makes it a Location object
  */
 
-
 import java.time.LocalTime;
 
 public class Location implements Comparable<Location>{

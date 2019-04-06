@@ -3,7 +3,6 @@ Author : Team Null
 Gui for the map and shows moving truck with it's orders' addresses.
  */
 
-
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;

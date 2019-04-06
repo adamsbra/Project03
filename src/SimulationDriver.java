@@ -3,7 +3,6 @@ Author : Team Null
 Sets the simulation
  */
 
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.time.LocalTime;
