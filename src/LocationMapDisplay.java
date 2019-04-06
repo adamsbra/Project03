@@ -1,9 +1,11 @@
+/*
+Author : Team Null
+Gui for the map and shows moving truck with it's orders' addresses.
+ */
+
 import javax.swing.*;
 import java.awt.*;
-import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.PriorityQueue;
-import java.util.TimerTask;
 
 public class LocationMapDisplay extends JPanel {
 
@@ -22,6 +24,7 @@ public class LocationMapDisplay extends JPanel {
     public boolean draw;
     public ArrayList<Location> loc_array = new ArrayList<>();
 
+    //Constructor
     public LocationMapDisplay(int x, int y, int width, int height, SimulationDriver route, Truck truck, boolean draw) {
         map = new String[x][y];
         updateLocations(route);
@@ -53,6 +56,7 @@ public class LocationMapDisplay extends JPanel {
         }
     }
 
+    //Prints locations without the GUI
     public void printLocations() {
         for (int i = 0; i < this.height; i++) {
             if (i < 10) {

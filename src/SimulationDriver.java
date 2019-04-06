@@ -1,12 +1,13 @@
-import javafx.util.Pair;
+/*
+Author : Team Null
+Sets the simulation
+ */
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.lang.reflect.Array;
-import java.text.DecimalFormat;
 import java.time.LocalTime;
-import java.util.*;
-import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.Scanner;
 
 public class SimulationDriver {
 
@@ -14,8 +15,8 @@ public class SimulationDriver {
     public Truck truck = new Truck();
     public Simulation strategy;
     public Route route;
-    public boolean gui;
 
+    //Constructor that allows the user to change the strategy(left or right)
     public SimulationDriver(String filename, String strat){
         try{
             addLocations(filename);
@@ -29,10 +30,9 @@ public class SimulationDriver {
         catch (FileNotFoundException ex){
             ex.printStackTrace();
         }
-
-
     }
 
+    //Reads the file of orders and adds it to a priority queue
     public void addLocations(String filename) throws FileNotFoundException {
         Scanner sc = new Scanner(new FileInputStream(filename));
         while(sc.hasNext()){
@@ -44,17 +44,17 @@ public class SimulationDriver {
             String order = line[4];
             Location customerLocation = new Location(house_number, street_number, direction, truck.getLocation(), time, order);
             locations.add(customerLocation);
-
         }
     }
 
-
+    //Prints locations in string format
     public void printLocations() {
         for (Location location : locations) {
             System.out.println(location.toString() + " " + location.distance + " " + location.east + " " + location.south + " " + location.time);
         }
     }
 
+    //Runs GUI
     public void runSimulation(LocationMapDisplay lmd, boolean gui){
         try {
             route = strategy.runSimulation(lmd, locations, truck, gui);
