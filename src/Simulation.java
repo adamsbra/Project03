@@ -1,10 +1,12 @@
+/*
+Author : Team Null
+Interface that has runSimulation
+ */
+
+
 import javafx.util.Pair;
 
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 
@@ -13,9 +15,9 @@ public interface Simulation {
     double BLOCK_DISTANCE = 1320;
     double HOUSE_DISTANCE = BLOCK_DISTANCE / 9;
     public Route runSimulation(LocationMapDisplay lmd, PriorityQueue<Location> locations, Truck truck, boolean gui) throws InterruptedException;
-
 }
 
+//Strategy for the truck to only turn left.
 class LeftSimulation implements Simulation{
 
     Location nextLocation;
@@ -30,6 +32,7 @@ class LeftSimulation implements Simulation{
     final int MOVE_UNITS = 1;
     final int LEFT_UNITS = 4;
 
+    //Implements strategy for the truck to only make left turns
     @Override
     public Route runSimulation(LocationMapDisplay loc_md, PriorityQueue<Location> locations, Truck truck, boolean gui) throws InterruptedException {
         this.lmd = loc_md;
@@ -155,6 +158,7 @@ class LeftSimulation implements Simulation{
     }
 }
 
+//Strategy for the truck to only turn right.
 class RightSimulation implements Simulation{
 
     Location nextLocation;
@@ -169,6 +173,7 @@ class RightSimulation implements Simulation{
     final int MOVE_UNITS = 1;
     final int RIGHT_UNITS = 4;
 
+    //Implements strategy for the truck to only make right turns
     @Override
     public Route runSimulation(LocationMapDisplay lmd, PriorityQueue<Location> locations, Truck truck, boolean gui) throws InterruptedException {
         PriorityQueue<Location> locations_copy = locations;

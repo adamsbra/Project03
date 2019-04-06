@@ -1,3 +1,9 @@
+/*
+Author : Team Null
+Takes an order and makes it a Location object
+ */
+
+
 import java.time.LocalTime;
 
 public class Location implements Comparable<Location>{
@@ -79,6 +85,7 @@ public class Location implements Comparable<Location>{
         return ((eastHouses + southHouses) * HOUSE_DISTANCE) / FEET_IN_MILE;
     }
 
+    //Allows for the change of location
     public void changeLocation(int east, int south){
         this.east = east;
         this.south = south;

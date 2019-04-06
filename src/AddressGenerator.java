@@ -1,8 +1,13 @@
+/*
+Author : Team Null
+Generates random orders.
+ */
+
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.Time;
 import java.time.LocalTime;
 import java.util.Random;
 
@@ -18,6 +23,7 @@ public class AddressGenerator {
 
     private LocalTime time = LocalTime.of(7, 0, 0);
 
+    //create random addresses
     private String createRandomAddress(){
         //Get a Random instance
         Random rand = new Random();
@@ -47,6 +53,7 @@ public class AddressGenerator {
 
     }
 
+    //generates addresses
     public void generateAddresses() throws IOException {
         //Opens a new file
         File file = new File(filename);
