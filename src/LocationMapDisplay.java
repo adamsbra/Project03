@@ -9,25 +9,31 @@ import java.util.TimerTask;
 
 public class LocationMapDisplay extends JPanel implements Observer {
 
-    public String[][] map;
-    public Location truckLocation;
-    public Location nextLocation;
-    public JFrame window;
+    private Integer[][] map;
+    private JFrame window;
     private int x;
     private int y;
     private int width;
     private int height;
-    private int square_size = 8;
+    private final int SQUARE_SIZE = 8;
+    private final int HOUSES_ON_BLOCK = 10;
+    private Location truckLocation;
+    private Location nextLocation;
+    private int currentDuration;
+    private PriorityQueue<Location> locations;
 
-    public LocationMapDisplay(int x, int y, int width, int height, Route route) {
-        map = new String[x][y];
+    public LocationMapDisplay(int x, int y, int width, int height, Truck truck) {
+        map = new Integer[x][y];
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
-        updateLocations(route);
+        this.nextLocation = truck.nextLocation;
+        this.currentDuration = truck.currentDuration;
+        this.truckLocation = truck.getLocation();
+        this.locations = truck.locations;
+        updateLocations();
         drawGrid();
-        repaint();
     }
 
     //Creates a 2d array with the route
@@ -40,27 +46,11 @@ public class LocationMapDisplay extends JPanel implements Observer {
     }
 
     //Changes symbols based on east and south.
-    private void updateLocations(Route route) {
-        for (Location location: route.houseLocations) {
+    public void updateLocations() {
+        for (Location location: locations) {
             int east = location.east;
             int south = location.south;
-            this.map[east][south] = "h";
-        }
-    }
-
-    public void printLocations() {
-        for (int i = 0; i < this.height; i++) {
-            if (i < 10) {
-                System.out.print("00");
-            }
-            if (i >= 10 && i < 100) {
-                System.out.print("0");
-            }
-            System.out.print(i + "0");
-            for (int j = 0; j < this.width; j++) {
-                System.out.print(this.map[i][j]);
-            }
-            System.out.println();
+            this.map[east][south] = 1;
         }
     }
 
@@ -69,39 +59,50 @@ public class LocationMapDisplay extends JPanel implements Observer {
         g.setColor(Color.BLACK);
         for (int i = 0; i < x; i++)
             for (int j = 0; j < y; j++)
-                g.drawRect(i * square_size, j * square_size, square_size, square_size);
-
+                g.drawRect(i * SQUARE_SIZE, j * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
+        g.setColor(Color.BLACK);
+        for (int i = 0; i < x; i++) {
+            for (int j = 0; j < y; j++) {
+                if (i % HOUSES_ON_BLOCK == 0) {
+                    g.fillRect(i * SQUARE_SIZE, j * SQUARE_SIZE, SQUARE_SIZE / 2, SQUARE_SIZE);
+                } else if (i % HOUSES_ON_BLOCK == 0 || j % HOUSES_ON_BLOCK == 0) {
+                    g.fillRect(i * SQUARE_SIZE, j * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE / 2);
+                }
+            }
+        }
         g.setColor(Color.BLUE);
         for (int i = 0; i < x; i++) {
             for (int j = 0; j < y; j++) {
                 if (map[i][j] != null) {
-                    if (map[i][j].equals("h")) {
-                        g.fillRect(i * square_size, j * square_size, square_size, square_size);
+                    if (map[i][j].equals(1)) {
+                        g.fillRect(i * SQUARE_SIZE, j * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
                     }
                 }
             }
         }
-        g.setColor(Color.BLACK);
-        for (int i = 0; i < x; i++) {
-            for (int j = 0; j < y; j++) {
-                if (i % 10 == 0) {
-                    g.fillRect(i * square_size, j * square_size, square_size / 2, square_size);
-                } else if (i % 10 == 0 || j % 10 == 0) {
-                    g.fillRect(i * square_size, j * square_size, square_size, square_size / 2);
-                }
-            }
-        }
         g.setColor(Color.MAGENTA);
-        g.fillRect(truckLocation.east * square_size, truckLocation.south * square_size, square_size, square_size);
+        g.fillRect(truckLocation.east * SQUARE_SIZE, truckLocation.south * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
         g.setColor(Color.GREEN);
-        g.fillRect(nextLocation.east * square_size, nextLocation.south * square_size, square_size, square_size);
+        if (nextLocation != null) {
+            g.fillRect(nextLocation.east * SQUARE_SIZE, nextLocation.south * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
+        }
     }
 
+
     @Override
-    public void updateGui(Location truckLocation, Location nextLocation) {
+    public void updateGui(Location truckLocation, Location nextLocation, int currentDuration, PriorityQueue<Location> locations) {
+        this.repaint();
         this.truckLocation = truckLocation;
         this.nextLocation = nextLocation;
-        repaint();
+        this.currentDuration = currentDuration;
+        this.locations = locations;
+        try {
+            Thread.sleep(currentDuration * 200);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
     }
 }
 
