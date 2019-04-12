@@ -4,16 +4,18 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.PriorityQueue;
 
-public class Truck{
+public class Truck implements TruckSubject{
 
     private final Location DISTRIBUTION_CENTER = new Location(510, 5, "East");
 
     private Location currentLocation = DISTRIBUTION_CENTER;
+    public Location nextLocation;
     public boolean isMovingEast = false;
     public boolean isMovingSouth = false;
     public boolean isMovingWest = false;
     public boolean isMovingNorth = false;
     public boolean isMoving = false;
+    public Observer gui;
     Map<Integer, Integer> route = new HashMap<>();
     double length = 0;
 
@@ -22,6 +24,10 @@ public class Truck{
         this.route = route;
     }
 
+
+    public void setNextLocation(Location nextLocation){
+        this.nextLocation = nextLocation;
+    }
     //gets the next location and get the distance from previous to next and add it to length. Also changes the current location of the truck.
     //That way we don't have to go through the PriorityQueue twice(since we don't know another way to get the length).
 
@@ -77,5 +83,27 @@ public class Truck{
 
     public void setCurrentLocation(Location location){
         this.currentLocation = location;
+    }
+
+
+    //Not currently implemented using a list, since we only have the need for a single gui.
+    @Override
+    public void notifyObserver(Observer observer){
+        observer.updateGui(this.currentLocation, this.nextLocation);
+        // observer.updateTracker(this.currentLocation, blah, blah);
+    }
+
+    @Override
+    public void registerObserver(Observer observer) {
+        this.gui = observer;
+    }
+
+    @Override
+    public void removeObserver(Observer observer) {
+        this.gui = null;
+    }
+
+    public void updateGui(){
+        notifyObserver(gui);
     }
 }

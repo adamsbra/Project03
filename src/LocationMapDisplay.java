@@ -1,3 +1,5 @@
+import javafx.util.Pair;
+
 import javax.swing.*;
 import java.awt.*;
 import java.time.LocalTime;
@@ -5,34 +7,27 @@ import java.util.ArrayList;
 import java.util.PriorityQueue;
 import java.util.TimerTask;
 
-public class LocationMapDisplay extends JPanel {
+public class LocationMapDisplay extends JPanel implements Observer {
 
     public String[][] map;
-    public Truck truck;
+    public Location truckLocation;
     public Location nextLocation;
     public JFrame window;
     private int x;
     private int y;
     private int width;
     private int height;
-    private int default_width;
-    private int default_height;
     private int square_size = 8;
-    final int STEP_SIZE = 200;
-    public boolean draw;
-    public ArrayList<Location> loc_array = new ArrayList<>();
 
-    public LocationMapDisplay(int x, int y, int width, int height, SimulationDriver route, Truck truck, boolean draw) {
+    public LocationMapDisplay(int x, int y, int width, int height, Route route) {
         map = new String[x][y];
-        updateLocations(route);
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
-        this.truck = truck;
-        if (draw) {
-            drawGrid();
-        }
+        updateLocations(route);
+        drawGrid();
+        repaint();
     }
 
     //Creates a 2d array with the route
@@ -45,10 +40,10 @@ public class LocationMapDisplay extends JPanel {
     }
 
     //Changes symbols based on east and south.
-    private void updateLocations(SimulationDriver route) {
-        for (Location l : route.locations) {
-            int east = l.east;
-            int south = l.south;
+    private void updateLocations(Route route) {
+        for (Location location: route.houseLocations) {
+            int east = location.east;
+            int south = location.south;
             this.map[east][south] = "h";
         }
     }
@@ -97,12 +92,15 @@ public class LocationMapDisplay extends JPanel {
             }
         }
         g.setColor(Color.MAGENTA);
-        g.fillRect(truck.getLocation().east * square_size, truck.getLocation().south * square_size, square_size, square_size);
+        g.fillRect(truckLocation.east * square_size, truckLocation.south * square_size, square_size, square_size);
         g.setColor(Color.GREEN);
         g.fillRect(nextLocation.east * square_size, nextLocation.south * square_size, square_size, square_size);
     }
 
-    public void repaintTask(){
+    @Override
+    public void updateGui(Location truckLocation, Location nextLocation) {
+        this.truckLocation = truckLocation;
+        this.nextLocation = nextLocation;
         repaint();
     }
 }

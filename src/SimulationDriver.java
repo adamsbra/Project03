@@ -13,8 +13,6 @@ public class SimulationDriver {
     public PriorityQueue<Location> locations = new PriorityQueue<>();
     public Truck truck = new Truck();
     public Simulation strategy;
-    public Route route;
-    public boolean gui;
 
     public SimulationDriver(String filename, String strat){
         try{
@@ -55,11 +53,12 @@ public class SimulationDriver {
         }
     }
 
-    public void runSimulation(LocationMapDisplay lmd, boolean gui){
+    public Route runSimulation(){
         try {
-            route = strategy.runSimulation(lmd, locations, truck, gui);
+            return strategy.runSimulation(locations, truck);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        return null;
     }
 }
