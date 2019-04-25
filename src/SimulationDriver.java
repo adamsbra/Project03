@@ -6,6 +6,7 @@ Sets the simulation
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.PriorityQueue;
 import java.util.Scanner;
 
@@ -41,7 +42,11 @@ public class SimulationDriver {
             String direction = line[1];
             int street_number = Integer.parseInt(line[2]);
             LocalTime time = LocalTime.parse(line[3]);
-            String order = line[4];
+            //String order = line[4];
+            ArrayList order = new ArrayList();
+            order.add(line[4]);
+            order.add(line[5]);
+            order.add(line[6]);
             Location customerLocation = new Location(house_number, street_number, direction, truck.getLocation(), time, order);
             locations.add(customerLocation);
         }

@@ -5,12 +5,15 @@ Takes an order and makes it a Location object
 
 
 import java.time.LocalTime;
+import java.util.ArrayList;
 
 public class Location implements Comparable<Location>{
 
     private final double BLOCK_DISTANCE = 1320;
     private final double HOUSE_DISTANCE = BLOCK_DISTANCE / 9; // New block distance, quarter of a mile converted to feet, divided by 9
+    //private final double HOUSE_DISTANCE = 0.03;
     private final double FEET_IN_MILE = 5280;
+    //private final double TRUCK_SPEED = 30;
 
     private int street_number;
     private int house_number;
@@ -18,13 +21,14 @@ public class Location implements Comparable<Location>{
     public double distance;
     public int east;
     public int south;
-    public String order;
+    ArrayList<String> order;
+    //public String order;
     public LocalTime time;
 
     //I added a new attribute distance which gets rid of the need for the treemap. Block distance is now measured in feet,
     //and adjustments have been made for it. Get Distance uses the truck as the origin location now.
 
-    Location(int house_number, int street_number, String direction, Location truck, LocalTime time, String order){
+    Location(int house_number, int street_number, String direction, Location truck, LocalTime time, ArrayList<String> order){
         this.house_number = house_number;
         this.street_number = street_number;
         this.direction = direction;
@@ -83,6 +87,10 @@ public class Location implements Comparable<Location>{
         //if we don't need the number
         //maybe use String getDistance, that way you can say 0.25 miles, and not just 0.25.
         return ((eastHouses + southHouses) * HOUSE_DISTANCE) / FEET_IN_MILE;
+    }
+
+    public String getOrder(){
+        return order.get(0) + ", " + order.get(1) + ", " + order.get(2);
     }
 
     //Allows for the change of location

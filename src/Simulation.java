@@ -5,31 +5,34 @@ Interface that has runSimulation
 
 import javafx.util.Pair;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 
 public interface Simulation {
-
+    //5280ft 1mile
     double BLOCK_DISTANCE = 1320;
-    double HOUSE_DISTANCE = BLOCK_DISTANCE / 9;
+    //    double HOUSE_DISTANCE = BLOCK_DISTANCE / 9;
+    double HOUSE_DISTANCE = 158.4; //0.03 miles
+    int MILES_PER_HOUR = 30; //truck's velocity
     public Route runSimulation(LocationMapDisplay lmd, PriorityQueue<Location> locations, Truck truck, boolean gui) throws InterruptedException;
 }
 
 //Strategy for the truck to only turn left.
-class LeftSimulation implements Simulation{
+class LeftSimulation implements Simulation, Subject{
 
-    Location nextLocation;
-    Location truckLocation;
-    Route route;
-    LocationMapDisplay lmd;
-    ArrayList<Pair<Integer, Integer>> locationsArray;
-    int duration = 0;
-    int distance = 0;
-    final int STEP_TIME = 200;
-    final int STOP_UNITS = 5;
-    final int MOVE_UNITS = 1;
-    final int LEFT_UNITS = 4;
+    private ArrayList<Observer> observers;
+    private OrderPrinter orderPrinter;
+    private Location nextLocation;
+    private Location truckLocation;
+    private Route route;
+    private LocationMapDisplay lmd;
+    private ArrayList<Pair<Integer, Integer>> locationsArray;
+    private int duration = 0;
+    private int distance = 0;
+    private final int STEP_TIME = 200;
+    private final int STOP_UNITS = 5;
+    private final int MOVE_UNITS = 1;
+    private final int LEFT_UNITS = 4;
 
     //Implements strategy for the truck to only make left turns
     @Override
@@ -140,37 +143,58 @@ class LeftSimulation implements Simulation{
             truckLocation = truck.getLocation();
             lmd.map[nextLocation.east][nextLocation.south] = "";
             duration += STOP_UNITS;
-            DecimalFormat f = new DecimalFormat("##.00");
             if (gui) {
                 Thread.sleep(STEP_TIME * STOP_UNITS);
-                lmd.repaint();
-                System.out.println("Duration: " + duration / 60 + " Minutes, " + duration % 60 + " Seconds");
-                System.out.println("Distance: " + f.format(distance * HOUSE_DISTANCE / 5280) + " Miles");
+                //lmd.repaint();
+                orderPrinter = new OrderPrinter(duration, distance, HOUSE_DISTANCE, MILES_PER_HOUR);// Prints the duration and distance
+                notifyObservers();
+//                duration = 0; //to get time from one house to the other instead of overall time.
             }
             locationsArray.add(new Pair(truckLocation.east, truckLocation.south));
         }
-        DecimalFormat f = new DecimalFormat("##.00");
-        System.out.println("Duration: " + duration / 60 + " Minutes, " + duration % 60 + " Seconds");
-        System.out.println("Distance: " + f.format(distance * HOUSE_DISTANCE / 5280) + " Miles");
+        new OrderPrinter(duration, distance, HOUSE_DISTANCE, MILES_PER_HOUR);// Prints the duration and distance
         route = new Route (locationsArray, duration, distance);
         return route;
+    }
+
+    @Override
+    public void notifyObservers() {
+        orderPrinter.update(nextLocation);
+        lmd.update(nextLocation);
+    }
+
+    @Override
+    public void registerObservers(Observer observer) {
+        observers.add(observer);
+    }
+
+    @Override
+    public void removeObservers(Observer observer) {
+        for(int i = 0; i < observers.size(); i++){
+            if(observer == observers.get(i)) {
+                observers.remove(i);
+                break;
+            }
+        }
     }
 }
 
 //Strategy for the truck to only turn right.
-class RightSimulation implements Simulation{
+class RightSimulation implements Simulation, Subject{
 
-    Location nextLocation;
-    Location truckLocation;
-    int duration = 0;
-    int distance = 0;
-    Route route;
-    LocationMapDisplay lmd;
-    ArrayList<Pair<Integer, Integer>> locationsArray;
-    final int STEP_TIME = 200;
-    final int STOP_UNITS = 5;
-    final int MOVE_UNITS = 1;
-    final int RIGHT_UNITS = 4;
+    private ArrayList<Observer> observers;
+    private OrderPrinter orderPrinter;
+    private Location nextLocation;
+    private Location truckLocation;
+    private int duration = 0;
+    private int distance = 0;
+    private Route route;
+    private LocationMapDisplay lmd;
+    private ArrayList<Pair<Integer, Integer>> locationsArray;
+    private final int STEP_TIME = 200;
+    private final int STOP_UNITS = 5;
+    private final int MOVE_UNITS = 1;
+    private final int RIGHT_UNITS = 4;
 
     //Implements strategy for the truck to only make right turns
     @Override
@@ -270,18 +294,37 @@ class RightSimulation implements Simulation{
             lmd.map[nextLocation.east][nextLocation.south] = "";
             duration += STOP_UNITS;
             if (gui) {
-                DecimalFormat f = new DecimalFormat("##.00");
-                System.out.println("Duration: " + duration / 60 + " Minutes, " + duration % 60 + " Seconds");
-                System.out.println("Distance: " + f.format(distance * HOUSE_DISTANCE / 5280) + " Miles");
                 Thread.sleep(STEP_TIME * STOP_UNITS);
-                lmd.repaint();
+                //lmd.repaint();
+                orderPrinter = new OrderPrinter(duration, distance, HOUSE_DISTANCE, MILES_PER_HOUR);// Prints the duration and distance
+                notifyObservers();
+
             }
             locationsArray.add(new Pair(truckLocation.east, truckLocation.south));
         }
-        DecimalFormat f = new DecimalFormat("##.00");
-        System.out.println("Duration: " + duration / 60 + " Minutes, " + duration % 60 + " Seconds");
-        System.out.println("Distance: " + f.format(distance * HOUSE_DISTANCE / 5280) + " Miles");
+        new OrderPrinter(duration, distance, HOUSE_DISTANCE, MILES_PER_HOUR);// Prints the duration and distance
         route = new Route (locationsArray, duration, distance);
         return route;
+    }
+
+    @Override
+    public void notifyObservers() {
+        orderPrinter.update(nextLocation);
+        lmd.update(nextLocation);
+    }
+
+    @Override
+    public void registerObservers(Observer observer) {
+        observers.add(observer);
+    }
+
+    @Override
+    public void removeObservers(Observer observer) {
+        for(int i = 0; i < observers.size(); i++){
+            if(observer == observers.get(i)) {
+                observers.remove(i);
+                break;
+            }
+        }
     }
 }

@@ -7,10 +7,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class LocationMapDisplay extends JPanel {
+public class LocationMapDisplay extends JPanel implements Observer {
 
     public String[][] map;
     public Truck truck;
+    private Location truckLocation;
     public Location nextLocation;
     public JFrame window;
     private int x;
@@ -106,7 +107,8 @@ public class LocationMapDisplay extends JPanel {
         g.fillRect(nextLocation.east * square_size, nextLocation.south * square_size, square_size, square_size);
     }
 
-    public void repaintTask(){
+    @Override
+    public void update(Location truckLocation) {
         repaint();
     }
 }
