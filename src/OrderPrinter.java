@@ -5,6 +5,7 @@ public class OrderPrinter implements Observer {
 //Location, time, order filled
     double time = 0.0;
 
+
     public OrderPrinter(int duration, int distanceInFeet, double HOUSE_DISTANCE, int MILES_PER_HOUR){
         double distanceInMiles =  distanceInFeet * HOUSE_DISTANCE / 5280;
         time = ((distanceInMiles / MILES_PER_HOUR) * 60) * 60;// time in seconds
@@ -12,9 +13,8 @@ public class OrderPrinter implements Observer {
         int seconds = (int) (time % 60);
 
         DecimalFormat f = new DecimalFormat("##.00");
-//        System.out.println("Duration: " + minute + " Minutes, " + seconds + " Seconds");
+        System.out.println("Duration: " + minute + " Minutes, " + seconds + " Seconds");
         System.out.println("Distance: " + f.format(distanceInMiles) + " Miles");
-
     }
 
 

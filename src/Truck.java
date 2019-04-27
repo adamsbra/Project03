@@ -5,7 +5,7 @@ Truck
 
 public class Truck{
 
-    private final Location DISTRIBUTION_CENTER = new Location(510, 5, "East");
+    public final Location DISTRIBUTION_CENTER = new Location(510, 5, "East");
 
     private Location currentLocation = DISTRIBUTION_CENTER;
     public boolean isMovingEast = false;

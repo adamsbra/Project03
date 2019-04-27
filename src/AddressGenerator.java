@@ -13,6 +13,8 @@ import java.util.Random;
 
 public class AddressGenerator {
 
+    private final int NUMBER_OF_ADDRESSES = 3;
+
     //Define filename
     private String filename = "random_addresses.txt";
     //Just for storing south and east.
@@ -59,7 +61,7 @@ public class AddressGenerator {
         File file = new File(filename);
         //Creates a buffered writer
         BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-        for (int i = 0; i < 100; i++){
+        for (int i = 0; i < NUMBER_OF_ADDRESSES; i++){
             //Writes a random address 100 times.
             writer.write(createRandomAddress());
         }

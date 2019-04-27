@@ -12,7 +12,7 @@ public interface Simulation {
     //5280ft 1mile
     double BLOCK_DISTANCE = 1320;
     //    double HOUSE_DISTANCE = BLOCK_DISTANCE / 9;
-    double HOUSE_DISTANCE = 158.4; //0.03 miles
+    double HOUSE_DISTANCE = 0.03 * 5280; //0.03 miles
     int MILES_PER_HOUR = 30; //truck's velocity
     public Route runSimulation(LocationMapDisplay lmd, PriorityQueue<Location> locations, Truck truck, boolean gui) throws InterruptedException;
 }
@@ -152,6 +152,7 @@ class LeftSimulation implements Simulation, Subject{
             }
             locationsArray.add(new Pair(truckLocation.east, truckLocation.south));
         }
+
         new OrderPrinter(duration, distance, HOUSE_DISTANCE, MILES_PER_HOUR);// Prints the duration and distance
         route = new Route (locationsArray, duration, distance);
         return route;
