@@ -1,10 +1,9 @@
-import javafx.util.Pair;
+package TruckUtils;
 
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.text.DecimalFormat;
-import java.time.LocalTime;
+import LocationUtils.Location;
+import LocationUtils.LocationsQueue;
+
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 
@@ -14,26 +13,44 @@ public interface Simulation {
     int STOP_UNITS = 5;
     int MOVE_UNITS = 1;
     int LEFT_UNITS = 4;
-    int RIGHT_UNITS = 4;
+    int RIGHT_UNITS = 2;
 
-    public void runSimulation(Truck truck) throws InterruptedException;
+    ArrayList<Point> runSimulation(Truck truck, TruckTracker tracker) throws InterruptedException;
 
 }
 
 class LeftSimulation implements Simulation{
 
-    private int duration = 0;
+    private int stepDuration = 0;
     private int distance = 0;
 
 
     @Override
-    public void runSimulation(Truck truck) {
-        while (truck.locations.size() != 0){
-            Location nextLocation = truck.locations.poll();
-            truck.setNextLocation(nextLocation);
+    public ArrayList<Point> runSimulation(Truck truck, TruckTracker tracker) {
+        ArrayList<Point> movements = new ArrayList<>();
+        LocationsQueue locationsQueueInstance = LocationsQueue.getLocationsQueueInstance();
+        PriorityQueue<Location> locations = locationsQueueInstance.locationsQueue;
+        while (locations.size() != 0){
+            truck.setCurrentStepDuration(1);
+            Location nextLocation = locations.peek();
             Location truckLocation = truck.getLocation();
+            if(truck.atDistributionCenter() && truck.isWaiting(nextLocation)){
+                truck.updateCurrentTime();
+                truck.update();
+                tracker.printDetails();
+                continue;
+            }
+            truck.setAtLocation(false);
+            if (truck.isWaiting(nextLocation)){
+                nextLocation = Truck.DISTRIBUTION_CENTER;
+                truck.setNextLocation(Truck.DISTRIBUTION_CENTER);
+            }
+            else {
+                nextLocation = locations.poll();
+                truck.setNextLocation(nextLocation);
+            }
             while (truckLocation.east != nextLocation.east || truckLocation.south != nextLocation.south) {
-                int currentDuration = 0;
+                int currentDuration = 1;
                 if (!truck.isMoving) {
                     if (truckLocation.direction.equalsIgnoreCase("east")) {
                         int east = nextLocation.east - truck.getLocation().east;
@@ -120,33 +137,55 @@ class LeftSimulation implements Simulation{
                         truckLocation = truck.getLocation();
                     }
                 }
-                distance++;
-                duration += currentDuration;
-                truck.setCurrentDuration(currentDuration);
-                truck.updateGui();
+                truck.setCurrentStepDuration(currentDuration);
+                truck.updateCurrentTime();
+                truck.update();
+                tracker.printDetails();
+                movements.add(new Point(truckLocation.east, truckLocation.south));
+                truck.addDistance();
             }
-            truck.setNextLocation(nextLocation);
-            duration += STOP_UNITS;
-            truck.setCurrentDuration(STOP_UNITS);
-            truck.updateGui();
+            truck.setAtLocation(true);
+            truck.setCurrentStepDuration(STOP_UNITS);
+            truck.updateCurrentTime();
+            truck.update();
+            tracker.printDetails();
+            movements.add(new Point(truckLocation.east, truckLocation.south));
         }
+        return movements;
     }
 }
 
 class RightSimulation implements Simulation{
 
-    private int duration = 0;
     private int distance = 0;
 
 
     @Override
-    public void runSimulation(Truck truck){
-        while (truck.locations.size() != 0) {
-            Location nextLocation = truck.locations.poll();
-            truck.setNextLocation(nextLocation);
+    public ArrayList<Point> runSimulation(Truck truck, TruckTracker tracker){
+        ArrayList<Point> movements = new ArrayList<>();
+        LocationsQueue locationsQueueInstance = LocationsQueue.getLocationsQueueInstance();
+        PriorityQueue<Location> locations = locationsQueueInstance.locationsQueue;
+        while (locations.size() != 0) {
+            truck.setCurrentStepDuration(1);
+            Location nextLocation = locations.peek();
             Location truckLocation = truck.getLocation();
+            if(truck.atDistributionCenter() && truck.isWaiting(nextLocation)){
+                truck.updateCurrentTime();
+                truck.update();
+                tracker.printDetails();
+                continue;
+            }
+            truck.setAtLocation(false);
+            if (truck.isWaiting(nextLocation)){
+                nextLocation = Truck.DISTRIBUTION_CENTER;
+                truck.setNextLocation(Truck.DISTRIBUTION_CENTER);
+            }
+            else {
+                nextLocation = locations.poll();
+                truck.setNextLocation(nextLocation);
+            }
             while (truckLocation.east != nextLocation.east || truckLocation.south != nextLocation.south) {
-                int currentDuration = 0;
+                int currentDuration = 1;
                 if (!truck.isMoving) {
                     if (truckLocation.direction.equalsIgnoreCase("east")) {
                         int east = nextLocation.east - truck.getLocation().east;
@@ -221,14 +260,20 @@ class RightSimulation implements Simulation{
                     }
                 }
                 distance++;
-                duration += currentDuration;
-                truck.setCurrentDuration(currentDuration);
-                truck.updateGui();
+                truck.setCurrentStepDuration(currentDuration);
+                truck.updateCurrentTime();
+                truck.update();
+                tracker.printDetails();
+                movements.add(new Point(truckLocation.east, truckLocation.south));
+                truck.addDistance();
             }
-            truck.setNextLocation(nextLocation);
-            duration += STOP_UNITS;
-            truck.setCurrentDuration(STOP_UNITS);
-            truck.updateGui();
+            truck.setAtLocation(true);
+            truck.setCurrentStepDuration(STOP_UNITS);
+            truck.updateCurrentTime();
+            truck.update();
+            tracker.printDetails();
+            movements.add(new Point(truckLocation.east, truckLocation.south));
         }
+        return movements;
     }
 }

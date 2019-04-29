@@ -1,4 +1,6 @@
-public interface TruckSubject {
+package TruckUtils;
+
+public interface Subject {
 
     public void notifyObserver(Observer observer);
     public void registerObserver(Observer observer);

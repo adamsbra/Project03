@@ -1,6 +1,6 @@
-import javafx.util.Pair;
+import LocationUtils.Location;
+import TruckUtils.Truck;
 
-import java.util.ArrayList;
 import java.util.PriorityQueue;
 
 public class Route {

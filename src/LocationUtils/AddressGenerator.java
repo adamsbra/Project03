@@ -1,10 +1,17 @@
+package LocationUtils;
+
+import ItemUtils.Item;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.Time;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Random;
+
+import ItemUtils.ItemGenerator;
+import ItemUtils.Order;
 
 public class AddressGenerator {
 
@@ -12,9 +19,8 @@ public class AddressGenerator {
     private String filename = "random_addresses.txt";
     //Just for storing south and east.
     private String[] directions = {"South", "East"};
-    private String[] menu_sandwhich = {"Sandwhich 1", "Sandwhich 2", "Sandwhich 3"};
-    private String[] menu_chips = {"Chips 1", "Chips 2"};
-    private String[] menu_drink = {"Drink 1", "Drink 2", "Drink 3"};
+    private final int NUMBER_OF_BLOCKS = 10;
+    private final int NUMBER_OF_ADDRESSES = 100;
 
     private LocalTime time = LocalTime.of(7, 0, 0);
 
@@ -31,18 +37,20 @@ public class AddressGenerator {
         //Weird comparison but it works, wont accept numbers with 00 in tens place
         while (house_number % 100 == 0|| house_number % 10 != 0){
             //Random numbers between 1 and 2000
-            house_number = rand.nextInt(1000);
+            house_number = rand.nextInt(NUMBER_OF_BLOCKS * 100 + 1);
         }
 
         String direction = directions[rand.nextInt(2)];
         int street_number = rand.nextInt(10 - 1) + 1;
-        String order = menu_sandwhich[rand.nextInt(3)] + "," + menu_chips[rand.nextInt(2)] + "," +
-                menu_drink[rand.nextInt(3)];
-
-
+        ArrayList<Item> items = new ArrayList<>();
+        items.add(ItemGenerator.sandwhich.get(rand.nextInt(3)));
+        items.add(ItemGenerator.drinks.get(rand.nextInt(3)));
+        items.add(ItemGenerator.chips.get(rand.nextInt(2)));
+        Order order = new Order(items, time);
+        String orderString = order.toString();
         //Prints out the house number, street type, and street number.
         //Street number is random number 1 through 20
-        return house_number + " " + direction + " " + street_number + " " + time.toString() +  " " + order + "\n";
+        return house_number + " " + direction + " " + street_number + " " + time.toString() +  " " + orderString + "\n";
 
 
     }
@@ -52,7 +60,7 @@ public class AddressGenerator {
         File file = new File(filename);
         //Creates a buffered writer
         BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-        for (int i = 0; i < 100; i++){
+        for (int i = 0; i < NUMBER_OF_ADDRESSES; i++){
             //Writes a random address 100 times.
             writer.write(createRandomAddress());
         }
