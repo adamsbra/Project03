@@ -1,5 +1,7 @@
 package LocationUtils;
 
+import TruckUtils.Truck;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.time.LocalTime;
@@ -16,14 +18,14 @@ public class LocationInit {
     public PriorityQueue<Location> getLocations() throws FileNotFoundException {
         Scanner sc = new Scanner(new FileInputStream(filename));
         PriorityQueue<Location> locations = new PriorityQueue<>();
+        locations.add(Truck.DISTRIBUTION_CENTER);
         while(sc.hasNext()){
             String line[] = sc.nextLine().split(" ");
             int house_number = Integer.parseInt(line[0]);
             String direction = line[1];
             int street_number = Integer.parseInt(line[2]);
             LocalTime time = LocalTime.parse(line[3]);
-            String order = line[4];
-            Location customerLocation = new Location(house_number, street_number, direction, time, order);
+            Location customerLocation = new Location(house_number, street_number, direction, time);
             locations.add(customerLocation);
         }
         return locations;

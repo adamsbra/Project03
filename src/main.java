@@ -1,4 +1,4 @@
-import ItemUtils.ItemGenerator;
+
 import LocationUtils.AddressGenerator;
 import LocationUtils.LocationInit;
 import LocationUtils.LocationsQueue;
@@ -15,7 +15,6 @@ public class main {
     public static void main(String[] args) {
         AddressGenerator generator = new AddressGenerator();
         try {
-            ItemGenerator.itemInit("item_list.txt");
             generator.generateAddresses();
             Scanner scnr = new Scanner(System.in);
             System.out.println("What strategy would you like to use?");

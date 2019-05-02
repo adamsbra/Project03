@@ -14,18 +14,15 @@ public class Truck implements Subject {
 
     private static final int TRAVEL_SPEED = 30;
     private static final int HOUSE_TRAVEL_TIME_SECONDS = (int) (Location.HOUSE_DISTANCE / TRAVEL_SPEED * 60 * 60);
-    public static final Location DISTRIBUTION_CENTER = new Location(510, 5, "East");
+    public static final Location DISTRIBUTION_CENTER = new Location(510, 5, "East", LocalTime.of(8, 1, 0));
 
     private Location currentLocation;
     private Simulation strategy;
     private int currentStepDuration;
     private Location nextLocation;
-    public PriorityQueue<Location> locations;
     private ArrayList<Observer> observers;
     private LocalTime currentTime;
-    private Map<Integer, Integer> route;
     public double distance;
-
     public boolean isMovingEast;
     public boolean isMovingSouth;
     public boolean isMovingWest;
@@ -45,7 +42,7 @@ public class Truck implements Subject {
         this.currentStepDuration = 1;
         this.currentTime = LocalTime.of(7, 0, 0);
         this.observers = new ArrayList<>();
-        currentLocation = DISTRIBUTION_CENTER;
+        this.currentLocation = new Location(510, 5, "East");
         if (strategy.equalsIgnoreCase("left")){
             this.strategy = new LeftSimulation();
         }
@@ -81,6 +78,10 @@ public class Truck implements Subject {
 
     public boolean atDistributionCenter(){
         return this.currentLocation == DISTRIBUTION_CENTER;
+    }
+
+    public Location getDistributionCenter(){
+        return DISTRIBUTION_CENTER;
     }
 
     //gets the next location and get the distance from previous to next and add it to length. Also changes the current location of the truck.

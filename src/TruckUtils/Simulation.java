@@ -21,10 +21,6 @@ public interface Simulation {
 
 class LeftSimulation implements Simulation{
 
-    private int stepDuration = 0;
-    private int distance = 0;
-
-
     @Override
     public ArrayList<Point> runSimulation(Truck truck, TruckTracker tracker) {
         ArrayList<Point> movements = new ArrayList<>();
@@ -34,18 +30,14 @@ class LeftSimulation implements Simulation{
             truck.setCurrentStepDuration(1);
             Location nextLocation = locations.peek();
             Location truckLocation = truck.getLocation();
-            if(truck.atDistributionCenter() && truck.isWaiting(nextLocation)){
+            if(truck.isWaiting(nextLocation)){
                 truck.updateCurrentTime();
                 truck.update();
                 tracker.printDetails();
                 continue;
             }
-            truck.setAtLocation(false);
-            if (truck.isWaiting(nextLocation)){
-                nextLocation = Truck.DISTRIBUTION_CENTER;
-                truck.setNextLocation(Truck.DISTRIBUTION_CENTER);
-            }
             else {
+                truck.setAtLocation(false);
                 nextLocation = locations.poll();
                 truck.setNextLocation(nextLocation);
             }
@@ -169,18 +161,14 @@ class RightSimulation implements Simulation{
             truck.setCurrentStepDuration(1);
             Location nextLocation = locations.peek();
             Location truckLocation = truck.getLocation();
-            if(truck.atDistributionCenter() && truck.isWaiting(nextLocation)){
+            if(truck.isWaiting(nextLocation)){
                 truck.updateCurrentTime();
                 truck.update();
                 tracker.printDetails();
                 continue;
             }
-            truck.setAtLocation(false);
-            if (truck.isWaiting(nextLocation)){
-                nextLocation = Truck.DISTRIBUTION_CENTER;
-                truck.setNextLocation(Truck.DISTRIBUTION_CENTER);
-            }
             else {
+                truck.setAtLocation(false);
                 nextLocation = locations.poll();
                 truck.setNextLocation(nextLocation);
             }
