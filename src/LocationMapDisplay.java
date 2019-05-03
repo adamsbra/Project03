@@ -96,7 +96,7 @@ public class LocationMapDisplay extends JPanel implements Observer {
         infoArray.set(0, "Current Location ~ " + truckLocation.toString());
         infoArray.set(1, "Current Time ~ " + currentTime.toString());
         infoArray.set(2, "Order Completed? ~ " + String.valueOf(orderFulfilled));
-        infoArray.set(3, "Distance Traveled ~ " + truck.distance * .03);
+        infoArray.set(3, "Distance Traveled ~ " + truck.distance);
     }
 
     public void paintComponent(Graphics g) {
