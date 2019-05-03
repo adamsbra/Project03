@@ -31,6 +31,7 @@ public class main {
                 LocationMapDisplay lmd = new LocationMapDisplay(10, 606, 606 + 20, truck);
                 truck.registerObserver(lmd);
             }
+            //Movements not currently used, could be in the future to save routes.
             ArrayList<Point> movements = truck.runStrategy(tracker);
         } catch (IOException e) {
             e.printStackTrace();

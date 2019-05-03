@@ -16,6 +16,8 @@ public class TruckTracker implements Observer {
     public DecimalFormat df = new DecimalFormat("###.##");
 
 
+    //Tracker which allows us to view the details of the trucks locations, the current time, the distance it has traveled,
+    //and whether or not we are at the delivery location. Used primarily on the LocationMapDisplay.
     @Override
     public void update(Truck truck) {
         //In order to get current location to work, you're gonna have to find a way to get the location to set itself with the

@@ -8,6 +8,7 @@ public class LocationsQueue {
     public PriorityQueue<Location> locationsQueue;
     private static LocationsQueue locationsQueueInstance = null;
 
+    //Singleton implementation of the locations priority queue, not much else to say other than that.
     private LocationsQueue() {
         try {
             LocationInit init = new LocationInit("random_addresses.txt");
