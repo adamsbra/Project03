@@ -15,6 +15,7 @@ public class LocationInit {
         this.filename = filename;
     }
 
+    //Initializes the locations from a file, and adds them to a priority queue.
     public PriorityQueue<Location> getLocations() throws FileNotFoundException {
         Scanner sc = new Scanner(new FileInputStream(filename));
         PriorityQueue<Location> locations = new PriorityQueue<>();
@@ -25,6 +26,12 @@ public class LocationInit {
             String direction = line[1];
             int street_number = Integer.parseInt(line[2]);
             LocalTime time = LocalTime.parse(line[3]);
+            for (int i = 4; i < line.length; i++){
+                String[] sandwhich = line[i].split(",");
+                String bread = sandwhich[0];
+                String[] ingredients = Arrays.copyOfRange(sandwhich, 1, sandwhich.length);
+                System.out.println(bread + Arrays.toString(ingredients));
+            }
             Location customerLocation = new Location(house_number, street_number, direction, time);
             locations.add(customerLocation);
         }

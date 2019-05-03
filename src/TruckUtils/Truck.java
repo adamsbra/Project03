@@ -68,8 +68,12 @@ public class Truck implements Subject {
         return nextLocation;
     }
 
+    //Determine if we are waiting to deliver to a location.
     public boolean isWaiting(Location nextLocation){
-        return this.getCurrentTime().compareTo(nextLocation.time) < 0;
+        if (this.getCurrentTime().compareTo(nextLocation.time) < 0){
+            return true;
+        }
+        return false;
     }
 
     public void setNextLocation(Location nextLocation){
@@ -84,9 +88,6 @@ public class Truck implements Subject {
         return DISTRIBUTION_CENTER;
     }
 
-    //gets the next location and get the distance from previous to next and add it to length. Also changes the current location of the truck.
-    //That way we don't have to go through the PriorityQueue twice(since we don't know another way to get the length).
-
     public void addDistance(){
         this.distance += Location.HOUSE_DISTANCE;
     }
@@ -96,6 +97,7 @@ public class Truck implements Subject {
         return currentLocation;
     }
 
+    //Method to determine the string of the location we are currently at, used to display location on tracker.
     public void setLocation(){
         int east = this.getLocation().east;
         int south = this.getLocation().south;
@@ -134,6 +136,7 @@ public class Truck implements Subject {
         }
     }
 
+    //Movement methods which permute east and south in some way, also sets location and the direction we are moving.
     public void moveEast(){
         currentLocation.east++;
         setLocation();
@@ -169,6 +172,7 @@ public class Truck implements Subject {
         isMovingNorth = false;
     }
 
+    //Determine if we are at an intersection.
     public boolean atIntersection(){
         return currentLocation.east % 10 == 0 && currentLocation.south % 10 == 0;
     }
@@ -181,6 +185,7 @@ public class Truck implements Subject {
         this.currentStepDuration = duration;
     }
 
+    //Observer pattern code, only used to notify the map.
     public void notifyObservers(){
         for (Observer observer: observers){
             notifyObserver(observer);
@@ -220,6 +225,7 @@ public class Truck implements Subject {
         this.atLocation = atLocation;
     }
 
+    //Runs the strategy given to the truck and connects it to the tracker.
     public ArrayList<Point> runStrategy(TruckTracker tracker){
         try {
             return strategy.runSimulation(this, tracker);

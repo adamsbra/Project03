@@ -14,8 +14,8 @@ public class main {
 
     public static void main(String[] args) {
         AddressGenerator generator = new AddressGenerator();
-        try {
-            generator.generateAddresses();
+//          try{
+//            generator.generateAddresses();
             Scanner scnr = new Scanner(System.in);
             System.out.println("What strategy would you like to use?");
             String strategy = scnr.nextLine();
@@ -31,9 +31,10 @@ public class main {
                 LocationMapDisplay lmd = new LocationMapDisplay(10, 606, 606 + 20, truck);
                 truck.registerObserver(lmd);
             }
+            //Movements not currently used, could be in the future to save routes.
             ArrayList<Point> movements = truck.runStrategy(tracker);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 }

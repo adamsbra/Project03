@@ -14,7 +14,7 @@ public class AddressGenerator {
     //Just for storing south and east.
     private String[] directions = {"South", "East"};
     private final int NUMBER_OF_BLOCKS = 10;
-    private final int NUMBER_OF_ADDRESSES = 3;
+    private final int NUMBER_OF_ADDRESSES = 1;
 
     private LocalTime time = LocalTime.of(7, 0, 0);
 

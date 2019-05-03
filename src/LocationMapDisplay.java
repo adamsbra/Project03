@@ -9,7 +9,6 @@ import java.util.Hashtable;
 import java.util.PriorityQueue;
 import LocationUtils.LocationsQueue;
 import TruckUtils.Observer;
-import TruckUtils.TruckTracker;
 
 public class LocationMapDisplay extends JPanel implements Observer {
 
@@ -36,10 +35,13 @@ public class LocationMapDisplay extends JPanel implements Observer {
     private JTextArea tarea;
 
     public LocationMapDisplay(int gridSize, int width, int height, Truck truck) {
+        //Represents the coordinate system used to construct the houses and roads. X and Y represent width and height
+        //respectively.
         X = HOUSES_ON_BLOCK * gridSize + 1;
         Y = HOUSES_ON_BLOCK * gridSize + 1;
         map = new Integer[X][Y];
-        //X and y here represent the dimensions of the road, consider c
+        //Actual width and height resolution of the window. Not sure how to do this dynamically based on elements in gui,
+        // but it isn't a huge concern at the moment.
         this.width = width;
         this.height = height;
         this.nextLocation = truck.getNextLocation();
@@ -54,12 +56,8 @@ public class LocationMapDisplay extends JPanel implements Observer {
     //Creates a 2d array with the route
     private void drawGrid() {
         JFrame window = new JFrame();
+        //Slider to adjust the simulation speed.
         JSlider s_speed = new JSlider();
-//        JColorChooser cc = new JColorChooser();
-//        cc.getSelectionModel().addChangeListener(e -> {
-//                TRUCK_COLOR = cc.getColor();
-//        });
-//        window.add(cc, BorderLayout.SOUTH);
         Hashtable<Integer, JLabel> position = new Hashtable<Integer, JLabel>();
         position.put(0, new JLabel("Fast"));
         position.put(100, new JLabel("Slow"));
@@ -72,6 +70,7 @@ public class LocationMapDisplay extends JPanel implements Observer {
             SLEEP_TICKS = ((JSlider) e.getSource()).getValue() * 5;
         });
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //Create the window and the text area for tracker.
         window.setBounds(0, 0, width, height);
         window.getContentPane().add(this);
         window.setVisible(true);
@@ -91,21 +90,26 @@ public class LocationMapDisplay extends JPanel implements Observer {
         }
     }
 
+    //Currently, tracker is having issues with updating on the map so I've done a crude implementation of it here for
+    //the purpose of the display.
     private void setInfoArray(Truck truck){
         infoArray.set(0, "Current Location ~ " + truckLocation.toString());
         infoArray.set(1, "Current Time ~ " + currentTime.toString());
         infoArray.set(2, "Order Completed? ~ " + String.valueOf(orderFulfilled));
-        infoArray.set(3, "Distance Traveled ~ " + truck.distance * .03);
+        infoArray.set(3, "Distance Traveled ~ " + truck.distance);
     }
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.setColor(ROAD_COLOR);
-        for (int i = 0; i < X; i++)
-            for (int j = 0; j < Y; j++)
-                g.drawRect(i * SQUARE_SIZE, j * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
+        //Draw all of the roads as a solid black square first.
+//        g.setColor(ROAD_COLOR);
+//        for (int i = 0; i < X; i++)
+//            for (int j = 0; j < Y; j++)
+//                g.drawRect(i * SQUARE_SIZE, j * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
+        //Draws roads by using half squares dependent on the direction of the road.
         for (int i = 0; i < X; i++) {
             for (int j = 0; j < Y; j++) {
+                //Check if we are on an intersection.
                 if (i % HOUSES_ON_BLOCK == 0 && j % HOUSES_ON_BLOCK == 0){
                     g.fillRect(i * SQUARE_SIZE, j * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
                 }
@@ -116,6 +120,7 @@ public class LocationMapDisplay extends JPanel implements Observer {
                 }
             }
         }
+        //Draws the houses present in the locations queue.
         g.setColor(HOUSE_COLOR);
         for (int i = 0; i < X; i++) {
             for (int j = 0; j < Y; j++) {
@@ -126,8 +131,10 @@ public class LocationMapDisplay extends JPanel implements Observer {
                 }
             }
         }
+        //Draws the truck location on the map.
         g.setColor(TRUCK_COLOR);
         g.fillRect(truckLocation.east * SQUARE_SIZE, truckLocation.south * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
+        //Draws the next location on the map.
         g.setColor(NEXT_COLOR);
         if (nextLocation != null) {
             g.fillRect(nextLocation.east * SQUARE_SIZE, nextLocation.south * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE);
@@ -137,6 +144,7 @@ public class LocationMapDisplay extends JPanel implements Observer {
 
     @Override
     public void update(Truck truck) {
+        //Weird implementation of the Tracker for the map.
         LocationsQueue locationsQueueInstance = LocationsQueue.getLocationsQueueInstance();
         this.truckLocation = truck.getLocation();
         this.nextLocation = truck.getNextLocation();
