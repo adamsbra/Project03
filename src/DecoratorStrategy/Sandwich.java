@@ -1,6 +1,7 @@
 package DecoratorStrategy;
 
 public abstract class Sandwich {
+
     String description;
 
     public abstract double cost();

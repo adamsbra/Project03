@@ -4,37 +4,50 @@ import java.util.ArrayList;
 
 public class Orders {
 
-//    private static String filename = "order.txt";
+    private static final double TAX = .10;
 
-//    public void getOrder() throws FileNotFoundException {
-//        ArrayList condiments = new ArrayList();
-//
-//        Scanner sc = new Scanner(new FileInputStream(filename));
-//
-//        while(sc.hasNext()){
-//            String line[] = sc.nextLine().split(" ");
-//
-//
-//            for(int i = 0; i < line.length; i++){
-////                List sandwiches = new ArrayList();
-//                String[] sandwiches = line[i].split(",");
-//                String bread = sandwiches[0];
-//
-//                for(int j = 1; j < sandwiches.length; j++){
-//                    condiments.add(sandwiches[j]);
-//                }
-//                //buildSandwich(bread, condiments);
-//            }
-////            String bread = line[0];
-////
-////            for(int i = 0; i < line.length; i++){
-////                condiments.add(line[i]);
-////            }
-////            buildSandwich(bread, condiments);
-//        }
-//    }
+    private double orderCost        = 0;
+    private double orderDuration    = 0;
+    private String orderDescription = "";
 
-    public Sandwich buildSandwich(String bread, String[] condiments){
+
+    //Takes an ArrayList of orders, loop through them to get the bread and condiments, and calls buildSandich()
+    //which returns a sandwich object, which is used to get the total cost and duration of the whole order.
+    public void buildOrder(ArrayList<String> orders){
+
+        for(int i = 0; i < orders.size(); i++) {
+
+            String order = orders.get(i);
+
+            String[] condiment = order.split(",");
+
+            String bread = condiment[0];
+
+            Sandwich sandwich = buildSandwich(bread, condiment);
+
+            orderCost        += sandwich.cost();
+            orderDuration    += sandwich.duration();
+            orderDescription += "Sandwich " + i + 1 + ": " + sandwich.getDescription() + ", ";
+        }
+        orderCost += orderCost + (orderCost*TAX);//adds taxes to the order.
+    }
+
+
+    //Getter for the whole order's cost
+    public double getOrderCost(){
+        return orderCost;
+    }
+    //Getter for the whole order's duration
+    public double getOrderDuration(){
+        return orderDuration;
+    }
+    //Getter for the whole order's description
+    public String getOrderDescription(){
+        return orderDescription;
+    }
+
+    //Builds each sandwich and return a Sandwich object to buildOrder
+    private Sandwich buildSandwich(String bread, String[] condiments){
         Sandwich sandwich;
 
         if(bread.equals("roll")){
@@ -68,42 +81,11 @@ public class Orders {
                 sandwich = new Tomato(sandwich);
             }
         }
-        System.out.println(sandwich.getDescription() + ", Cost: " + sandwich.cost() + ", Duration: " + sandwich.duration());
+        sandwich = new PaperCover(sandwich); //Adds paper cover to sandwich
+        sandwich = new OrderBagging(sandwich); //Bags the sandwich
+
         return sandwich;
     }
-
-    public void buildOrder(ArrayList<String> orders){
-        double orderCost     = 0;
-        double orderDuration = 0;
-
-        for(int i = 0; i < orders.size(); i++) {
-
-            String order = orders.get(i);
-
-            String[] condiment = order.split(",");
-
-            String bread = condiment[0];
-
-            Sandwich sandwich = buildSandwich(bread, condiment);
-
-            orderCost     += sandwich.cost();
-            orderDuration += sandwich.duration();
-
-        }
-        System.out.println("Total cost: " + orderCost + ", Total duration: " + orderDuration);
-
-    }
-
-
-//    public static void main(String[] args) {
-//
-//        ArrayList<String> orders = new ArrayList<>();
-//        orders.add("roll,ham,mayonnaise,lettuce");
-//        orders.add("wrap,turkey,mustard,cheese,lettuce,tomato");
-//
-//        Orders o = new Orders();
-//        o.buildOrder(orders);
-//    }
 
 
 }
