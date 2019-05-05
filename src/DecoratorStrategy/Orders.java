@@ -1,6 +1,12 @@
 package DecoratorStrategy;
+/*
+Author: Francis Severino
+Team Null
+This class allows for orders objects which is used to build orders of sandwiches and get their price, duration and description
+*/
 
 import java.util.ArrayList;
+
 
 public class Orders {
 
@@ -27,9 +33,10 @@ public class Orders {
 
             orderCost        += sandwich.cost();
             orderDuration    += sandwich.duration();
-            orderDescription += "Sandwich " + i + 1 + ": " + sandwich.getDescription() + ", ";
+            orderDescription += "Sandwich " + i + ": " + sandwich.getDescription() + ", ";
         }
         orderCost += orderCost + (orderCost*TAX);//adds taxes to the order.
+        //System.out.println(orderDescription + "   " + orderCost);
     }
 
 
@@ -37,10 +44,12 @@ public class Orders {
     public double getOrderCost(){
         return orderCost;
     }
+
     //Getter for the whole order's duration
     public double getOrderDuration(){
         return orderDuration;
     }
+
     //Getter for the whole order's description
     public String getOrderDescription(){
         return orderDescription;
