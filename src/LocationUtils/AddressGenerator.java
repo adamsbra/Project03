@@ -15,6 +15,8 @@ public class AddressGenerator {
     private String[] directions = {"South", "East"};
     private final int NUMBER_OF_BLOCKS = 10;
     private final int NUMBER_OF_ADDRESSES = 1;
+    private final int SANDWICHES_MAX = 3;
+    private final int CONDIMENTS_MAX = 7;
 
     private LocalTime time = LocalTime.of(7, 0, 0);
 
@@ -38,7 +40,8 @@ public class AddressGenerator {
         int street_number = rand.nextInt(10 - 1) + 1;
         //Prints out the house number, street type, and street number.
         //Street number is random number 1 through 20
-        return house_number + " " + direction + " " + street_number + " " + time.toString() + "\n";
+        String order = createOrderString();
+        return house_number + " " + direction + " " + street_number + " " + time.toString() + " " + order + "\n";
 
 
     }
@@ -54,5 +57,47 @@ public class AddressGenerator {
         }
         //Close writer
         writer.close();
+    }
+
+    public String createOrderString(){
+        String order = "";
+        Random rand = new Random();
+        for (int i = 0; i < rand.nextInt(SANDWICHES_MAX) + 1; i++) {
+            int bread = rand.nextInt(2);
+            if (bread == 0) {
+                order += "roll";
+            }
+            if (bread == 1) {
+                order += "wrap";
+            }
+            for (int j = 0; j < rand.nextInt(CONDIMENTS_MAX) + 1; j++) {
+                int ingredient = rand.nextInt(7);
+                switch (ingredient) {
+                    case 0:
+                        order += ",cheese";
+                        break;
+                    case 1:
+                        order += ",ham";
+                        break;
+                    case 2:
+                        order += ",lettuce";
+                        break;
+                    case 3:
+                        order += ",mayonnaise";
+                        break;
+                    case 4:
+                        order += ",mustard";
+                        break;
+                    case 5:
+                        order += ",tomato";
+                        break;
+                    case 6:
+                        order += ",turkey";
+                        break;
+                }
+            }
+            order += " ";
+        }
+        return order;
     }
 }

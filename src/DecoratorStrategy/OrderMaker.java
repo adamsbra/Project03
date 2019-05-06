@@ -9,18 +9,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 
-public class Orders {
+public class OrderMaker {
 
     private static final double TAX = .10;
 
-    private double orderCost        = 0;
-    private double orderDuration    = 0;
-    private String orderDescription = "";
-
-
     //Takes an ArrayList of orders, loop through them to get the bread and condiments, and calls buildSandich()
     //which returns a sandwich object, which is used to get the total cost and duration of the whole order.
-    public void buildOrder(ArrayList<String> orders){
+    public static Order buildOrder(ArrayList<String> orders){
+
+        double orderCost = 0;
+        double orderDuration = 0;
+        String orderDescription = "";
 
         for(int i = 0; i < orders.size(); i++) {
 
@@ -41,27 +40,15 @@ public class Orders {
             orderDescription += "Sandwich " + (i + 1) + ": " + sandwich.getDescription() + "\n";
         }
         orderCost += orderCost + (orderCost*TAX);//adds taxes to the order.
+        return new Order(orderCost, orderDuration, orderDescription);
         //System.out.println(orderDescription + "   " + orderCost);
     }
 
 
-    //Getter for the whole order's cost
-    public double getOrderCost(){
-        return orderCost;
-    }
 
-    //Getter for the whole order's duration
-    public double getOrderDuration(){
-        return orderDuration;
-    }
-
-    //Getter for the whole order's description
-    public String getOrderDescription(){
-        return orderDescription;
-    }
 
     //Builds each sandwich and return a Sandwich object to buildOrder
-    private Sandwich buildSandwich(String bread, String[] condiments){
+    private static Sandwich buildSandwich(String bread, String[] condiments){
         Sandwich sandwich;
 
         if(bread.equals("roll")){

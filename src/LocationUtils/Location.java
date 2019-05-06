@@ -1,8 +1,9 @@
 package LocationUtils;
 
-import DecoratorStrategy.Orders;
+import DecoratorStrategy.Order;
 
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 
 public class Location implements Comparable<Location>{
 
@@ -19,17 +20,21 @@ public class Location implements Comparable<Location>{
     public int east;
     public int south;
     public LocalTime time;
-    public Orders orders;
+    public Order order;
 
     //I added a new attribute distance which gets rid of the need for the treemap. Block distance is now measured in feet,
     //and adjustments have been made for it. Get Distance uses the truck as the origin location now.
 
-    public Location(int house_number, int street_number, String direction, LocalTime time, Orders orders){
+    public Location(int house_number, int street_number, String direction, LocalTime time, Order order){
         this.house_number = house_number;
         this.street_number = street_number;
         this.direction = direction;
         this.time = time;
-        this.orders = orders;
+        this.order = order;
+
+        //Adds the order preparation time onto the time it was ordered, as to get a final time when the delivery will
+        //be ready.
+        time = time.plus((long) order.getOrderDuration(), ChronoUnit.SECONDS);
 
         //1 = 010;  11 = 110;  22 = 220... etc
         //0, 10, 20, is to specify that is not in that street, but you go up to that street number
@@ -105,6 +110,10 @@ public class Location implements Comparable<Location>{
 
     public String toString(){
         return house_number + " " +  direction + " " +  street_number + "St";
+    }
+
+    public String orderToString() {
+        return order.getOrderDescription();
     }
 
     //Comparator needed for adding the locations to the PriorityQueue.

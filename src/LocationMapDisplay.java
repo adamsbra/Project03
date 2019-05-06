@@ -75,6 +75,8 @@ public class LocationMapDisplay extends JPanel implements Observer {
         window.getContentPane().add(this);
         window.setVisible(true);
         tarea = new JTextArea();
+        tarea.setLineWrap(true);
+        tarea.setWrapStyleWord(true);
         tarea.setText(infoArray.toString());
         window.add(tarea, BorderLayout.SOUTH);
         window.add(s_speed, BorderLayout.NORTH);
