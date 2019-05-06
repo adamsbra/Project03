@@ -6,6 +6,7 @@ This class allows for orders objects which is used to build orders of sandwiches
 */
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 public class Orders {
@@ -25,15 +26,19 @@ public class Orders {
 
             String order = orders.get(i);
 
-            String[] condiment = order.split(",");
+            //Changed these assignments so that we start with ingredients and get the bread and condiments individually.
+            //Originally, bread was included in the condiments so now they are seperate.
+            String[] ingredients = order.split(",");
 
-            String bread = condiment[0];
+            String bread = ingredients[0];
+
+            String[] condiment = Arrays.copyOfRange(ingredients, 1, ingredients.length);
 
             Sandwich sandwich = buildSandwich(bread, condiment);
 
             orderCost        += sandwich.cost();
             orderDuration    += sandwich.duration();
-            orderDescription += "Sandwich " + i + ": " + sandwich.getDescription() + ", ";
+            orderDescription += "Sandwich " + (i + 1) + ": " + sandwich.getDescription() + "\n";
         }
         orderCost += orderCost + (orderCost*TAX);//adds taxes to the order.
         //System.out.println(orderDescription + "   " + orderCost);
