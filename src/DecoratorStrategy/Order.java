@@ -28,4 +28,8 @@ public class Order {
     public String getOrderDescription(){
         return orderDescription;
     }
+
+    public String toString(){
+        return "Order Description: " + orderDescription + " Cost: $" + orderCost + " Prep Time: " + orderDuration + " seconds";
+    }
 }

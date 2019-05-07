@@ -14,7 +14,6 @@ public class AddressGenerator {
     //Just for storing south and east.
     private String[] directions = {"South", "East"};
     private final int NUMBER_OF_BLOCKS = 10;
-    private final int NUMBER_OF_ADDRESSES = 1;
     private final int SANDWICHES_MAX = 3;
     private final int CONDIMENTS_MAX = 7;
 
@@ -46,12 +45,12 @@ public class AddressGenerator {
 
     }
 
-    public void generateAddresses() throws IOException {
+    public void generateAddresses(int amt) throws IOException {
         //Opens a new file
         File file = new File(filename);
         //Creates a buffered writer
         BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-        for (int i = 0; i < NUMBER_OF_ADDRESSES; i++){
+        for (int i = 0; i < amt; i++){
             //Writes a random address 100 times.
             writer.write(createRandomAddress());
         }

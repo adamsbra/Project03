@@ -8,8 +8,8 @@ import java.time.temporal.ChronoUnit;
 public class Location implements Comparable<Location>{
 
 //    private final double BLOCK_DISTANCE = 1320;
-//    private final double HOUSE_DISTANCE = BLOCK_DISTANCE / 9; // New block distance, quarter of a mile converted to feet, divided by 9
-//    private final double FEET_IN_MILE = 5280;
+////    private final double HOUSE_DISTANCE = BLOCK_DISTANCE / 9; // New block distance, quarter of a mile converted to feet, divided by 9
+////    private final double FEET_IN_MILE = 5280;
 
     public static final double HOUSE_DISTANCE = .03;
 
@@ -34,7 +34,7 @@ public class Location implements Comparable<Location>{
 
         //Adds the order preparation time onto the time it was ordered, as to get a final time when the delivery will
         //be ready.
-        time = time.plus((long) order.getOrderDuration(), ChronoUnit.SECONDS);
+        this.time = this.time.plus((long) order.getOrderDuration(), ChronoUnit.SECONDS);
 
         //1 = 010;  11 = 110;  22 = 220... etc
         //0, 10, 20, is to specify that is not in that street, but you go up to that street number
@@ -110,10 +110,6 @@ public class Location implements Comparable<Location>{
 
     public String toString(){
         return house_number + " " +  direction + " " +  street_number + "St";
-    }
-
-    public String orderToString() {
-        return order.getOrderDescription();
     }
 
     //Comparator needed for adding the locations to the PriorityQueue.
