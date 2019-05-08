@@ -4,11 +4,8 @@ import LocationUtils.Location;
 
 import java.awt.*;
 import java.time.LocalTime;
-
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.PriorityQueue;
 
 public class Truck implements Subject {
 

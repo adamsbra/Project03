@@ -29,8 +29,11 @@ public class TruckTracker implements Observer {
         this.distance = truck.distance;
     }
 
-    public void printDetails(){
+    public void printDetails() {
+
         System.out.println("Current Location - " + currentLocation.toString() + ": Current Time - " + time + ": Order Completed - " + orderFulfilled + ": Distance Traveled - " + df.format(distance));
+//      + "Order - " + currentLocation.orders.getOrderDescription() + ", Cost" + currentLocation.orders.getOrderCost() + ", Duration" + currentLocation.orders.getOrderDuration());
+
     }
 
     public String getDetails(){

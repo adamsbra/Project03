@@ -5,7 +5,7 @@ Project03
 Due: Friday, February 29, at 11:59pm
 
 Design (UML) and code(Java) programs that will: 
-1. generate random addresses in our Sandwich Truck's neighborhood and save them to a file. Create a file with 100 random addresses.
+1. generate random addresses in our DecoratorStrategy.Sandwich Truck's neighborhood and save them to a file. Create a file with 100 random addresses.
 
 2. read the file of random addresses and insert them into a priority queue, where the priority is the distance from current truck location to the address. 
 Assume truck at a fixed location in the middle of the neighborhood (distribution center).
