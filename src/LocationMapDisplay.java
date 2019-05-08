@@ -3,6 +3,7 @@ import TruckUtils.Truck;
 
 import javax.swing.*;
 import java.awt.*;
+import java.text.DecimalFormat;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -33,6 +34,7 @@ public class LocationMapDisplay extends JPanel implements Observer {
     private boolean orderFulfilled;
     private PriorityQueue<Location> locations;
     private JTextArea tarea;
+    public DecimalFormat df = new DecimalFormat("###.##");
 
     public LocationMapDisplay(int gridSize, int width, int height, Truck truck) {
         //Represents the coordinate system used to construct the houses and roads. X and Y represent width and height
@@ -75,6 +77,8 @@ public class LocationMapDisplay extends JPanel implements Observer {
         window.getContentPane().add(this);
         window.setVisible(true);
         tarea = new JTextArea();
+        tarea.setLineWrap(true);
+        tarea.setWrapStyleWord(true);
         tarea.setText(infoArray.toString());
         window.add(tarea, BorderLayout.SOUTH);
         window.add(s_speed, BorderLayout.NORTH);
@@ -95,8 +99,8 @@ public class LocationMapDisplay extends JPanel implements Observer {
     private void setInfoArray(Truck truck){
         infoArray.set(0, "Current Location ~ " + truckLocation.toString());
         infoArray.set(1, "Current Time ~ " + currentTime.toString());
-        infoArray.set(2, "Order Completed? ~ " + String.valueOf(orderFulfilled));
-        infoArray.set(3, "Distance Traveled ~ " + truck.distance);
+        infoArray.set(2, "At Location? ~ " + String.valueOf(orderFulfilled));
+        infoArray.set(3, "Distance Traveled ~ " + df.format(truck.distance));
     }
 
     public void paintComponent(Graphics g) {
@@ -156,8 +160,8 @@ public class LocationMapDisplay extends JPanel implements Observer {
         if (infoArray.isEmpty()){
             infoArray.add(0, "Current Location ~ " + truckLocation.toString());
             infoArray.add(1, "Current Time ~ " + currentTime.toString());
-            infoArray.add(2, "Order Completed? ~ " + String.valueOf(orderFulfilled));
-            infoArray.add(3, "Distance Traveled ~ " + String.valueOf(truck.distance));
+            infoArray.add(2, "At Location? ~ " + String.valueOf(orderFulfilled));
+            infoArray.add(3, "Distance Traveled ~ " + String.valueOf(df.format(truck.distance)));
         }
         else {
             setInfoArray(truck);

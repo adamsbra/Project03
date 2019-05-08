@@ -11,7 +11,7 @@ public class Truck implements Subject {
 
     private static final int TRAVEL_SPEED = 30;
     private static final int HOUSE_TRAVEL_TIME_SECONDS = (int) (Location.HOUSE_DISTANCE / TRAVEL_SPEED * 60 * 60);
-    public static final Location DISTRIBUTION_CENTER = new Location(510, 5, "East", LocalTime.of(8, 1, 0));
+    public static final Location DISTRIBUTION_CENTER = new Location(510, 5, "East", LocalTime.of(19, 0, 0));
 
     private Location currentLocation;
     private Simulation strategy;

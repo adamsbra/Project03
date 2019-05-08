@@ -4,8 +4,12 @@ import LocationUtils.Location;
 import LocationUtils.LocationsQueue;
 
 import java.awt.*;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
+
+import static java.time.temporal.ChronoUnit.HOURS;
+import static java.time.temporal.ChronoUnit.MINUTES;
 
 //Strategy pattern that implements the Simulation. Simulation controls the truck and it's properties, as well as the update
 //for the tracker.
@@ -39,7 +43,7 @@ class LeftSimulation implements Simulation{
             //Check the next location to see if we are waiting to deliver.
             Location nextLocation = locations.peek();
             Location truckLocation = truck.getLocation();
-            if(truck.isWaiting(nextLocation)){
+            if(truck.isWaiting(nextLocation) && locations.size() > 1){
                 truck.updateCurrentTime();
                 truck.update();
                 tracker.printDetails();
@@ -167,6 +171,9 @@ class LeftSimulation implements Simulation{
             tracker.printDetails();
             movements.add(new Point(truckLocation.east, truckLocation.south));
         }
+        System.out.println("Total Distance - " + truck.distance);
+        long minutes = LocalTime.of(7, 0, 0).until(truck.getCurrentTime(), MINUTES);
+        System.out.println("Total Time - " + minutes + " minutes");
         return movements;
     }
 }
@@ -185,7 +192,7 @@ class RightSimulation implements Simulation{
             truck.setCurrentStepDuration(1);
             Location nextLocation = locations.peek();
             Location truckLocation = truck.getLocation();
-            if(truck.isWaiting(nextLocation)){
+            if(truck.isWaiting(nextLocation) && locations.size() > 1){
                 truck.updateCurrentTime();
                 truck.update();
                 tracker.printDetails();
@@ -286,6 +293,9 @@ class RightSimulation implements Simulation{
             tracker.printDetails();
             movements.add(new Point(truckLocation.east, truckLocation.south));
         }
+        System.out.println("Total Distance - " + truck.distance);
+        long minutes = LocalTime.of(7, 0, 0).until(truck.getCurrentTime(), MINUTES);
+        System.out.println("Total Time - " + minutes + " minutes");
         return movements;
     }
 }

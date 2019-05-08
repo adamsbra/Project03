@@ -178,20 +178,21 @@ class OrderBagging extends CondimentDecorator {
     public OrderBagging(Sandwich sandwich){
         this.sandwich = sandwich;
     }
-
+    //Fixed cost and duration, originally they were not adding on the previous cost and duration.
+    //Also changed getDescription method so it returns correctly.
     @Override
     public double cost() {
-        return 0.75;
+        return 0.75 + sandwich.cost();
     }
 
     @Override
     public double duration() {
-        return 20;
+        return 20 + sandwich.duration();
     }
 
     @Override
     public String getDescription() {
-        return "";
+        return sandwich.getDescription();
     }
 }
 
@@ -202,19 +203,21 @@ class PaperCover extends CondimentDecorator {
     public PaperCover(Sandwich sandwich){
         this.sandwich = sandwich;
     }
+    //Fixed cost and duration, originally they were not adding on the previous cost and duration.
+    //Also changed getDescription method so it returns correctly.
     @Override
     public double cost() {
-        return 0.50;
+        return 0.50 + sandwich.cost();
     }
 
     @Override
     public double duration() {
-        return 75;
+        return 75 + sandwich.duration();
     }
 
     @Override
     public String getDescription() {
-        return "";
+        return sandwich.getDescription();
     }
 }
 

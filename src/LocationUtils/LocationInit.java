@@ -1,6 +1,7 @@
 package LocationUtils;
 
-import DecoratorStrategy.Orders;
+import DecoratorStrategy.Order;
+import DecoratorStrategy.OrderMaker;
 import TruckUtils.Truck;
 
 import java.io.FileInputStream;
@@ -28,7 +29,6 @@ public class LocationInit {
             int street_number = Integer.parseInt(line[2]);
             LocalTime time = LocalTime.parse(line[3]);
             ArrayList<String> orderlst = new ArrayList<>();
-            Orders orders = new Orders();
             for (int i = 4; i < line.length; i++){
                 orderlst.add(line[i]);
 
@@ -37,9 +37,9 @@ public class LocationInit {
 //                String[] ingredients = Arrays.copyOfRange(sandwhich, 1, sandwhich.length);
 //                System.out.println(bread + Arrays.toString(ingredients));
             }
-            orders.buildOrder(orderlst);
+            Order order = OrderMaker.buildOrder(orderlst);
 
-            Location customerLocation = new Location(house_number, street_number, direction, time, orders);
+            Location customerLocation = new Location(house_number, street_number, direction, time, order);
             locations.add(customerLocation);
         }
         return locations;
