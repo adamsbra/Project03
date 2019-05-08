@@ -1,23 +1,16 @@
-/*
-Author : Team Null
-Interface that has runSimulation
- */
+import LocationUtils.Location;
+import TruckUtils.Truck;
 
-import javafx.util.Pair;
-
-import java.util.ArrayList;
-
+import java.util.PriorityQueue;
 
 public class Route {
 
-    ArrayList<Pair<Integer, Integer>> locations;
-    int duration;
-    int distance;
+    public PriorityQueue<Location> locations;
+    public Truck truck;
 
-    //Constructor for Route
-    Route(ArrayList<Pair<Integer, Integer>> locations, int duration, int distance){
+    //Relatively useless, but helpful to have just in case.
+    public Route(Truck truck, PriorityQueue<Location> locations){
+        this.truck = truck;
         this.locations = locations;
-        this.duration = duration;
-        this.distance = distance;
     }
 }
